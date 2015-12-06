@@ -1,0 +1,11 @@
+#control_bar {
+	background: #ff0000;
+}
+
+#dungeon_map {
+	border: 1px solid;
+}
+
+#dungeon_map td {
+    border: 1px solid blue;
+}
