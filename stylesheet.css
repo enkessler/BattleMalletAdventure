@@ -6,6 +6,51 @@
 	border: 1px solid;
 }
 
-#dungeon_map td {
-    border: 1px solid blue;
+div.corridor_room {
+	position: absolute;
+	height: 167px;
+	width: 400px;
+	border: 5px solid blue;
+	background-image: url('images/corridor_white.jpg');
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+div.corridor_node {
+	position: absolute;
+	height: 35%;
+	width: 13.5%;
+	border: 2px solid red;
+}
+
+div.corridor_node_col_1 {
+	left: 6.25%;
+}
+
+div.corridor_node_col_2 {
+	left: 21%;
+}
+
+div.corridor_node_col_3 {
+	left: 35%;
+}
+
+div.corridor_node_col_4 {
+	left: 50%;
+}
+
+div.corridor_node_col_5 {
+	left: 65%;
+}
+
+div.corridor_node_col_6 {
+	left: 80%;
+}
+
+div.corridor_node_row_1 {
+	top: 15%;
+}
+
+div.corridor_node_row_2 {
+	top: 51%;
 }

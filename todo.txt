@@ -1,0 +1,31 @@
+Enemy list as left bar
+  -add remove enemies to list as the spawn/are killed
+  -flash damage overlay on enemy image on damaging attack
+  -flash connecting (but not damaging overlay on non-damaging attack)
+  -flash miss overlay on missed attack
+  -display relevant enemy stats
+  -highlight/zoom to enemy in list when mousing over enemy icon on map
+  
+Enemy spawning
+  -start with button to spawn a single enemy in a random empty room/tile
+  -add muyltiple enemy spawning
+  -spawn differnt types of enemy
+  -tie number and enemy type to dungeon level
+  -tie spawning to turn based power cycle
+  -have spawn locations be related to hero locations (as per game rules) 
+  
+Dungeon rooms
+  -have rooms be aware of what dungeon level they are (i.e. how stairs affect them)
+  
+Dungeon map
+  -Only display rooms for the current dungeon level (i.e. be aware of stairs)
+  -add up/down button to change displayed level of dungeon
+  
+  
+Dungeon expansion
+  -start with button to add a room to the map
+  -add room when exit node of room is clicked
+  -add room when hero ends turn on exit node of room (or whatever normally triggers a new room)
+  
+Display options
+  -add option to show/hide node borders
