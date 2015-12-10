@@ -23,9 +23,17 @@ Dungeon map
   
   
 Dungeon expansion
-  -start with button to add a room to the map
+  -start with button to add a room to the map (no rotation, add to right side of last room only)
+  
+    -pop new room, top z-level (draggable?)
+    -button to rotate room
+    -click preexisting room to attach to
+    -attach new room to clicked room
   -add room when exit node of room is clicked
   -add room when hero ends turn on exit node of room (or whatever normally triggers a new room)
   
 Display options
   -add option to show/hide node borders
+  
+Room alignment
+  -create 4 versions (of CSS, not JS models) of every room instead of trying to translate internal node alignments through rotations

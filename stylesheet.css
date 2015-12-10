@@ -1,16 +1,34 @@
 #control_bar {
-	background: #ff0000;
+	position: fixed;
+	left: 25%;
+	top: 20px;
+	width: 50%;
+    z-index: 5;
+    
+	background: grey;
+    height: 50px;
+    
+    border: 5px solid blue;
 }
+
+#spawn_room_button {
+    background: red;
+    height: 30px;
+    width: 100px;
+    text-align: center;
+    margin: auto;
+}
+
 
 #dungeon_map {
 	border: 1px solid;
 }
 
 div.corridor_room {
-	position: absolute;
+    position: absolute;
 	height: 167px;
 	width: 400px;
-	border: 5px solid blue;
+	/* border: 5px solid blue;*/
 	background-image: url('images/corridor_white.jpg');
 	background-size: contain;
 	background-repeat: no-repeat;
