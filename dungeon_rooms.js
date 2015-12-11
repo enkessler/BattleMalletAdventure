@@ -14,8 +14,9 @@ function StairsRoom() {
 			[ 'd', 'd', 'd', 'd', 'd', 'd' ] ];
 }
 
-function CorridorRoom() {	
-	this.style_class = "corridor_room";
+function CorridorRoom() {
+	
+	this.style_classes = ['corridor_room', 'room'];
 	
 	this.left_room = null;
 	this.top_room = null;

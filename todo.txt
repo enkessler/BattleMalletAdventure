@@ -31,6 +31,7 @@ Dungeon expansion
     -attach new room to clicked room
   -add room when exit node of room is clicked
   -add room when hero ends turn on exit node of room (or whatever normally triggers a new room)
+  -fix spawned map room to center as map scrolls?
   
 Display options
   -add option to show/hide node borders
