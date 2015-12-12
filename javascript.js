@@ -1,4 +1,5 @@
 var map_rooms = [ new CorridorRoom() ];
+var room_ids = 0;
 
 $(document).ready(function() {
 
@@ -15,7 +16,12 @@ $(document).ready(function() {
 
 	// Configure rotation button
 	$('#rotate_room_button').click(function() {
-		var room_to_place = document.getElementById('spawned_room');
+		var room_to_place = document.getElementsByClassName('spawned_room')[0]; // Should
+		// only
+		// be
+		// one
+		// new
+		// room
 		rotate_room(room_to_place);
 	});
 
@@ -61,13 +67,19 @@ function draw_room(room_object, left_offset, top_offset, rotation, z_index) {
 	var room_div = document.createElement('div');
 
 	// Configure room
-	if (room_object.id != null) {
-		room_div.id = room_object.id;
-	}
+	room_div.id = room_object.room_id;
 
 	for (i = 0; i < room_object.style_classes.length; i++) {
-		room_div.className += ' ' + room_object.style_classes[i] + '_rotate_'
-				+ rotation;
+		class_name = room_object.style_classes[i];
+
+		// Getting an element by a class name using a regular expression is a
+		// bit of a hassle so I'm simply going to avoid it by not modifying the
+		// class in this case.
+		if (class_name != 'spawned_room') {
+			class_name += '_rotate_' + rotation;
+		}
+
+		room_div.className += ' ' + class_name;
 	}
 
 	room_div.style.left = left_offset; // format: "XXXpx"
@@ -95,9 +107,10 @@ function draw_room(room_object, left_offset, top_offset, rotation, z_index) {
 function spawn_room() {
 	// Determine new room
 	var next_room = new CorridorRoom(); // Just a hard-coded corridor for now
+	next_room.room_id = room_ids++;
 	next_room.rotation = 0;
-	next_room.id = 'spawned_room';
-	console.log('new rooms id: ' + next_room.id);
+	next_room.style_classes.push('spawned_room');
+	console.log('new rooms id: ' + next_room.room_id);
 	// Display new room and rotation button
 	var rotation_button = document.getElementById('rotate_room_button');
 
