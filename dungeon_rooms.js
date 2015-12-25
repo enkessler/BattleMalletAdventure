@@ -1,5 +1,6 @@
-function RoomNode(room_styles) {
-	this.style_classes = room_styles;
+function RoomNode(id, room_styles) {
+    this.id = id;
+    this.style_classes = room_styles;
 }
 
 function TombRoom() {
@@ -14,41 +15,41 @@ function StairsRoom() {
 			[ 'd', 'd', 'd', 'd', 'd', 'd' ] ];
 }
 
-function CorridorRoom() {
-	
-	this.style_classes = ['corridor_room', 'room'];
-	
-	this.left_room = null;
-	this.top_room = null;
-	this.right_room = null;
-	this.bottom_room = null;
-	
+function CorridorRoom(id) {
+    this.id = id;
+    this.style_classes = ['corridor_room', 'room'];
 
-	this.room_nodes = [
-			new RoomNode([ 'corridor_node', 'corridor_node_row_1',
-					'corridor_node_col_1' ]),
-			new RoomNode([ 'corridor_node', 'corridor_node_row_1',
-					'corridor_node_col_2' ]),
-			new RoomNode([ 'corridor_node', 'corridor_node_row_1',
-					'corridor_node_col_3' ]),
-			new RoomNode([ 'corridor_node', 'corridor_node_row_1',
-					'corridor_node_col_4' ]),
-			new RoomNode([ 'corridor_node', 'corridor_node_row_1',
-					'corridor_node_col_5' ]),
-			new RoomNode([ 'corridor_node', 'corridor_node_row_1',
-					'corridor_node_col_6' ]),
-			new RoomNode([ 'corridor_node', 'corridor_node_row_2',
-					'corridor_node_col_1' ]),
-			new RoomNode([ 'corridor_node', 'corridor_node_row_2',
-					'corridor_node_col_2' ]),
-			new RoomNode([ 'corridor_node', 'corridor_node_row_2',
-					'corridor_node_col_3' ]),
-			new RoomNode([ 'corridor_node', 'corridor_node_row_2',
-					'corridor_node_col_4' ]),
-			new RoomNode([ 'corridor_node', 'corridor_node_row_2',
-					'corridor_node_col_5' ]),
-			new RoomNode([ 'corridor_node', 'corridor_node_row_2',
-					'corridor_node_col_6' ]) ];
+    this.left_room = null;
+    this.top_room = null;
+    this.right_room = null;
+    this.bottom_room = null;
+
+
+    this.room_nodes = [
+            new RoomNode(this.id + '_' + 1,[ 'corridor_node', 'corridor_node_row_1',
+                    'corridor_node_col_1', 'left_connect_1' ]),
+            new RoomNode(this.id + '_' + 2,[ 'corridor_node', 'corridor_node_row_1',
+                    'corridor_node_col_2' ]),
+            new RoomNode(this.id + '_' + 3,[ 'corridor_node', 'corridor_node_row_1',
+                    'corridor_node_col_3' ]),
+            new RoomNode(this.id + '_' + 4,[ 'corridor_node', 'corridor_node_row_1',
+                    'corridor_node_col_4' ]),
+            new RoomNode(this.id + '_' + 5,[ 'corridor_node', 'corridor_node_row_1',
+                    'corridor_node_col_5' ]),
+            new RoomNode(this.id + '_' + 6,[ 'corridor_node', 'corridor_node_row_1',
+                    'corridor_node_col_6', 'right_connect_1' ]),
+            new RoomNode(this.id + '_' + 7,[ 'corridor_node', 'corridor_node_row_2',
+                    'corridor_node_col_1', 'left_connect_2' ]),
+            new RoomNode(this.id + '_' + 8,[ 'corridor_node', 'corridor_node_row_2',
+                    'corridor_node_col_2' ]),
+            new RoomNode(this.id + '_' + 9,[ 'corridor_node', 'corridor_node_row_2',
+                    'corridor_node_col_3' ]),
+            new RoomNode(this.id + '_' + 10,[ 'corridor_node', 'corridor_node_row_2',
+                    'corridor_node_col_4' ]),
+            new RoomNode(this.id + '_' + 11,[ 'corridor_node', 'corridor_node_row_2',
+                    'corridor_node_col_5' ]),
+            new RoomNode(this.id + '_' + 12,[ 'corridor_node', 'corridor_node_row_2',
+                    'corridor_node_col_6', 'right_connect_2' ]) ];
 }
 
 function LCorridorRoom() {

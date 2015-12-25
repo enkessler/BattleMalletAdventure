@@ -1,5 +1,5 @@
-var map_rooms = [ new CorridorRoom() ];
-var room_ids = 0;
+var map_rooms = [ new CorridorRoom(0) ];
+var room_ids = 1;
 
 $(document).ready(function() {
 
@@ -67,7 +67,8 @@ function draw_room(room_object, left_offset, top_offset, rotation, z_index) {
 	var room_div = document.createElement('div');
 
 	// Configure room
-	room_div.id = room_object.room_id;
+    //console.log('drawing room: ' + room_object.id);
+	room_div.id = room_object.id;
 
 	for (i = 0; i < room_object.style_classes.length; i++) {
 		class_name = room_object.style_classes[i];
@@ -95,7 +96,9 @@ function draw_room(room_object, left_offset, top_offset, rotation, z_index) {
 			node_div.className += ' ' + node_object.style_classes[j]
 					+ '_rotate_' + rotation;
 		}
+		//console.log('drawing room node: ' + node_object.id);
 
+		node_div.id = node_object.id;
 		room_div.appendChild(node_div);
 	}
 
@@ -104,13 +107,41 @@ function draw_room(room_object, left_offset, top_offset, rotation, z_index) {
 	map.appendChild(room_div);
 };
 
+function highlight_connection_nodes() {
+	//console.log('highlighting connection nodes');
+	for (i = 0; i < map_rooms.length; i++) {
+		var room_object = map_rooms[i];
+		console.log('checking room ' + i);
+
+		highlight_connection_nodes_on_room(room_object);
+	}
+};
+
+function highlight_connection_nodes_on_room(room_object) {
+	for (i = 0; i < room_object.room_nodes.length; i++) {
+		var node_object = room_object.room_nodes[i];
+
+		//console.log('checking node ' + i);
+		if (node_object.style_classes.join(' ').indexOf('_connect_') != -1) {
+			//console.log('connection node found');
+			var overlay_div = document.createElement('div');
+			overlay_div.className = 'connection_node';
+
+			// Add overlay div to node
+			var map = document.getElementById(node_object.id);
+			map.appendChild(overlay_div);
+		}
+	}
+};
+
 function spawn_room() {
 	// Determine new room
-	var next_room = new CorridorRoom(); // Just a hard-coded corridor for now
-	next_room.room_id = room_ids++;
+	var next_room_id = room_ids++;
+	//console.log('next room id is: ' + next_room_id);
+	var next_room = new CorridorRoom(next_room_id); // Just a hard-coded corridor for now
 	next_room.rotation = 0;
 	next_room.style_classes.push('spawned_room');
-	console.log('new rooms id: ' + next_room.room_id);
+	//console.log('new rooms id: ' + next_room.id);
 	// Display new room and rotation button
 	var rotation_button = document.getElementById('rotate_room_button');
 
@@ -124,6 +155,8 @@ function spawn_room() {
 	console.log('next room rotation:' + next_room.rotation);
 	draw_room(next_room, left_offset, top_offset, next_room.rotation, 5);
 
+	highlight_connection_nodes();
+	highlight_connection_nodes_on_room(next_room);
 };
 
 function old_add_room_to_map() {
