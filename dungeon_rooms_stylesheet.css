@@ -25,19 +25,19 @@ div.corridor_room_rotate_90, div.corridor_room_rotate_270 {
 }
 
 div.corridor_room_rotate_0 {
-	background-image: url('images/corridor_white_0.png');
+	background-image: url('images/corridor_white_0.gif');
 }
 
 div.corridor_room_rotate_90 {
-	background-image: url('images/corridor_white_90.png');
+	background-image: url('images/corridor_white_90.gif');
 }
 
 div.corridor_room_rotate_180 {
-	background-image: url('images/corridor_white_180.png');
+	background-image: url('images/corridor_white_180.gif');
 }
 
 div.corridor_room_rotate_270 {
-	background-image: url('images/corridor_white_270.png');
+	background-image: url('images/corridor_white_270.gif');
 }
 
 div.corridor_node_rotate_0, div.corridor_node_rotate_90, div.corridor_node_rotate_180,
