@@ -1,5 +1,21 @@
-var map_rooms = [ new CorridorRoom(0) ];
+// Courtesy of 	http://creativenotice.com/2013/07/regular-expression-in-array-indexof/
+
+if (typeof Array.prototype.regXIndexOf === 'undefined') {
+	Array.prototype.regXIndexOf = function (rx) {
+		for (var i in this) {
+			if (this[i].toString().match(rx)) {
+				return i;
+			}
+		}
+		return -1;
+	};
+}
+
+
+var map_rooms = [new CorridorRoom(0)];
 var room_ids = 1;
+var room_connections_clicked = 0;
+
 
 $(document).ready(function() {
 
@@ -107,6 +123,96 @@ function draw_room(room_object, left_offset, top_offset, rotation, z_index) {
 	map.appendChild(room_div);
 };
 
+function toggle_connection_room(overlay_element) {
+	console.log('toggling overlay element');
+	connection_side = determine_connection_side(overlay_element);
+	console.log('connection side: ' + connection_side);
+
+	room_element = overlay_element.parentElement.parentElement;
+	relevant_connection_overlays = get_connection_overlays_for(connection_side, room_element);
+
+
+	for (var i = 0; i < relevant_connection_overlays.length; ++i) {
+		console.log('toggling node highlighting');
+		if (element.className.match(/highlighted_connection/) != null) {
+			relevant_connection_overlays[i].className = relevant_connection_overlays[i].className.replace('highlighted_connection', '');
+			--room_connections_clicked;
+		} else {
+			relevant_connection_overlays[i].className += ' highlighted_connection';
+			++room_connections_clicked;
+		};
+	};
+};
+
+function get_connection_overlays_for(connection_side, room_element) {
+	child_elements = room_element.children;
+	var relevant_room_nodes = [];
+
+	console.log('child elements found: ' + child_elements);
+	for (var i = 0; i < child_elements.length; ++i) {
+		element = child_elements[i];
+		console.log('checking elemetn: ' + element);
+		console.log('with classes: ' + element.className);
+		if (element.className.match(new RegExp(connection_side + '_connect_')) != null) {
+			console.log('connecting node found');
+			relevant_room_nodes.push(element);
+		};
+	};
+
+	var node_overlays = [];
+
+	console.log('relevant room nodes found: ' + relevant_room_nodes);
+
+	for (var i = 0; i < relevant_room_nodes.length; ++i) {
+		child_elements = relevant_room_nodes[i].childNodes;
+
+		for (var j = 0; j < child_elements.length; ++j) {
+			element = child_elements[j];
+			if (element.className.match(/connection_node/) != null) {
+				console.log('overlay div found');
+				node_overlays.push(element);
+			};
+		};
+	};
+
+	return node_overlays;
+};
+
+function determine_connection_side(room_node_element) {
+	//console.log('toggling node element');
+	parent_element = room_node_element.parentElement;
+	//console.log('element classes: ' + parent_element.className);
+	element_classes = parent_element.className.split(' ');
+	//console.log('element classes: ' + element_classes);
+	found = element_classes.regXIndexOf(/left_connect/);
+	//console.log('index found: ' + found);
+
+	if (found != -1) {
+		return 'left';
+	};
+
+	found = element_classes.regXIndexOf(/bottom_connect/);
+	//console.log('index found: ' + found);
+
+	if (found != -1) {
+		return 'bottom';
+	};
+
+	found = element_classes.regXIndexOf(/top_connect/);
+	//console.log('index found: ' + found);
+
+	if (found != -1) {
+		return 'top';
+	};
+
+	found = element_classes.regXIndexOf(/right_connect/);
+	//console.log('index found: ' + found);
+
+	if (found != -1) {
+		return 'right';
+	};
+};
+
 function highlight_connection_nodes() {
 	//console.log('highlighting connection nodes');
 	for (i = 0; i < map_rooms.length; i++) {
@@ -127,9 +233,14 @@ function highlight_connection_nodes_on_room(room_object) {
 			var overlay_div = document.createElement('div');
 			overlay_div.className = 'connection_node';
 
+			overlay_div.onclick = function () {
+				console.log('setting toggle function');
+				toggle_connection_room(this);
+			};
+
 			// Add overlay div to node
-			var map = document.getElementById(node_object.id);
-			map.appendChild(overlay_div);
+			var parent_element = document.getElementById(node_object.id);
+			parent_element.appendChild(overlay_div);
 		}
 	}
 };
