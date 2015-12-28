@@ -372,6 +372,8 @@ function connect_new_room() {
     // Connect objects
     connect_rooms(connected_room_object, connected_room_set.connection_side, spawned_room_object, spawned_room_set.connection_side);
     map_rooms.push(spawned_room_object);
+    spawned_room_object.style_classes.splice(spawned_room_object.style_classes.indexOf('spawned_room'), 1);
+
     console.log('connection complete');
 }
 
