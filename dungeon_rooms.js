@@ -15,9 +15,18 @@ function StairsRoom() {
 			[ 'd', 'd', 'd', 'd', 'd', 'd' ] ];
 }
 
-function CorridorRoom(id) {
+function CorridorRoom(id, rotation) {
     this.id = id;
     this.style_classes = ['corridor_room', 'room'];
+
+    // Default values
+    if (rotation === undefined) {
+        console.log('using default rotatation');
+        this.rotation = 0;
+    } else {
+        console.log('using rotatation' + rotation);
+        this.rotation = rotation;
+    }
 
     this.left_room = null;
     this.top_room = null;

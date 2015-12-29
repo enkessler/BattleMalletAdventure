@@ -20,9 +20,6 @@ var room_connections_clicked = 0;
 
 $(document).ready(function() {
 
-	// Set up the initial map
-	map_rooms[0].rotation = 0;
-
 	// Display the initial map
 	rebuild_map();
 
@@ -33,55 +30,55 @@ $(document).ready(function() {
 
 	// Configure rotation button
 	$('#rotate_room_button').click(function() {
-		var room_to_place = document.getElementsByClassName('spawned_room')[0]; // Should
-		// only
-		// be
-		// one
-		// new
-		// room
-		rotate_room(room_to_place);
+		// Spawned room object should exist by now
+		rotate_room(spawned_room);
 	});
 
 });
 
-function rotate_room(room_div) {
+function rotate_room(room_object) {
+    console.log('rotating room ' + room_object.id);
+    var room_div = document.getElementById(room_object.id);
+    var rotation = room_object.rotation;
+    var new_rotation;
+    console.log('starting rotation: ' + rotation);
 
-	var rotation = room_div.className.match(/_rotate_\d+/)[0].match(/\d+/)[0];
-	var new_rotation;
+    switch (rotation) {
+        case 0:
+            new_rotation = 90;
+            break;
+        case 90:
+            new_rotation = 180;
+            break;
+        case 180:
+            new_rotation = 270;
+            break;
+        case 270:
+            new_rotation = 0;
+            break;
+        default:
+            console.log("Don't know how to handle a rotation of '"
+                + rotation + "'");
+    }
+    console.log('new rotation: ' + new_rotation);
+    var new_class = room_div.className.replace(new RegExp('_rotate_' + rotation,
+        'g'), '_rotate_' + new_rotation);
 
-	switch (rotation) {
-	case '0':
-		new_rotation = '90';
-		break;
-	case '90':
-		new_rotation = '180';
-		break;
-	case '180':
-		new_rotation = '270';
-		break;
-	case '270':
-		new_rotation = '0';
-		break;
-	default:
-		console.log("Don't know how to handle a rotation of '"
-				+ rotation.rotation + "'");
-	}
+    console.log('new class: ' + new_class);
+    room_div.className = new_class;
+    room_object.rotation = new_rotation;
 
-	var new_class = room_div.className.replace(new RegExp('_rotate_' + rotation,
-			'g'), '_rotate_' + new_rotation);
+    for (var i = 0; i < room_div.childNodes.length; i++) {
+        new_class = room_div.childNodes[i].className.replace(new RegExp(
+            '_rotate_' + rotation, 'g'), '_rotate_' + new_rotation);
 
-	room_div.className = new_class;
-
-	for (var i = 0; i < room_div.childNodes.length; i++) {
-		new_class = room_div.childNodes[i].className.replace(new RegExp(
-				'_rotate_' + rotation, 'g'), '_rotate_' + new_rotation);
-
-		room_div.childNodes[i].className = new_class;
-	}
+        room_div.childNodes[i].className = new_class;
+    }
 }
 
-function draw_room(room_object, left_offset, top_offset, rotation, z_index) {
+function draw_room(room_object, left_offset, top_offset, z_index) {
 	var room_div = document.createElement('div');
+    var rotation = room_object.rotation;
 
 	// Configure room
     //console.log('drawing room: ' + room_object.id);
@@ -268,7 +265,6 @@ function spawn_room() {
 	var next_room_id = room_ids++;
 	//console.log('next room id is: ' + next_room_id);
 	spawned_room = new CorridorRoom(next_room_id); // Just a hard-coded corridor for now
-    spawned_room.rotation = 0;
     spawned_room.style_classes.push('spawned_room');
 	//console.log('new rooms id: ' + next_room.id);
 	// Display new room and rotation button
@@ -282,7 +278,7 @@ function spawn_room() {
 			+ 'px';
 
 	console.log('next room rotation:' + spawned_room.rotation);
-	draw_room(spawned_room, left_offset, top_offset, spawned_room.rotation, 5);
+	draw_room(spawned_room, left_offset, top_offset, 5);
 
 	highlight_connection_nodes();
 	highlight_connection_nodes_on_room(spawned_room);
@@ -438,7 +434,7 @@ function build_room(room_data) {
     //console.log('left offset:' + left_offset);
     //console.log('top offset:' + top_offset);
     //console.log('map room rotation:' + map_room.rotation);
-    var room_div = draw_room(map_room, left_offset, top_offset, map_room.rotation, null);
+    var room_div = draw_room(map_room, left_offset, top_offset, null);
 
 	// Generate any connecting rooms
 	var connected_rooms = [];
