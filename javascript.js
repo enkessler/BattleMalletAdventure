@@ -76,7 +76,7 @@ function rotate_room(room_object) {
     }
 }
 
-function draw_room(room_object, left_offset, top_offset, z_index) {
+function draw_room(room_object) {
 	var room_div = document.createElement('div');
     var rotation = room_object.rotation;
 
@@ -96,10 +96,6 @@ function draw_room(room_object, left_offset, top_offset, z_index) {
 
 		room_div.className += ' ' + class_name;
 	}
-
-	room_div.style.left = left_offset; // format: "XXXpx"
-	room_div.style.top = top_offset; // format: "XXXpx"
-	room_div.style.zIndex = z_index;
 
 	// Configure room nodes
 	for (i = 0; i < room_object.room_nodes.length; i++) {
@@ -121,6 +117,12 @@ function draw_room(room_object, left_offset, top_offset, z_index) {
 	map.appendChild(room_div);
 
     return room_div;
+}
+
+function position_room(room_div, left_offset, top_offset, z_index) {
+    room_div.style.left = left_offset; // format: "XXXpx"
+    room_div.style.top = top_offset; // format: "XXXpx"
+    room_div.style.zIndex = z_index;
 }
 
 function toggle_connection_room(overlay_element) {
@@ -278,7 +280,8 @@ function spawn_room() {
 			+ 'px';
 
 	console.log('next room rotation:' + spawned_room.rotation);
-	draw_room(spawned_room, left_offset, top_offset, 5);
+    var room_div = draw_room(spawned_room);
+    position_room(room_div, left_offset, top_offset, 5);
 
 	highlight_connection_nodes();
 	highlight_connection_nodes_on_room(spawned_room);
@@ -383,8 +386,9 @@ function connect_rooms(connected_room_object, connected_room_set_connection_side
             break;
         //case 'bottom':
         //    break;
-        //case 'left':
-        //    break;
+        case 'left':
+            connected_room_object.left_room = spawned_room_object;
+            break;
         default:
             console.log("Don't know how to handle a connection side of '"
                 + connected_room_set_connection_side + "'");
@@ -393,8 +397,9 @@ function connect_rooms(connected_room_object, connected_room_set_connection_side
     switch (spawned_room_set_connection_side) {
         //case 'top':
         //    break;
-        //case 'right':
-        //    break;
+        case 'right':
+            spawned_room_object.right_room = connected_room_object;
+            break;
         //case 'bottom':
         //    break;
         case 'left':
@@ -409,77 +414,83 @@ function connect_rooms(connected_room_object, connected_room_set_connection_side
 function build_room(room_data) {
 	// Draw the room
 
-	var map_room = room_data.room;
-	var connecting_room = room_data.parent_div;
+	var room_object = room_data.room;
+	var base_div = room_data.parent_div;
+    var base_connection_side = room_data.side;
 
 	var left_offset;
 	var top_offset;
 
-	if (connecting_room == null) {
+    var room_div = draw_room(room_object);
+
+    if (base_div == null) {
         //console.log('No parent div. Using default offsets...');
         left_offset = "100px";
-		top_offset = "100px";
-	} else {
-        //console.log('Parent div found (' + connecting_room + '). Calculating offsets...');
-        //console.log('Parent room styling: ' + getComputedStyle(connecting_room));
-        //console.log('Parent room width: ' + getComputedStyle(connecting_room).getPropertyValue('width'));
-        //console.log('Parent room top: ' + getComputedStyle(connecting_room).getPropertyValue('top'));
-        left_offset = (parseInt(getComputedStyle(connecting_room)
-				.getPropertyValue('width')) + parseInt(connecting_room.style.left))
-				+ 'px';
-		top_offset = getComputedStyle(connecting_room).getPropertyValue('top');
-	}
+        top_offset = "100px";
+    } else {
+        //console.log('Parent div found (' + base_div.id + '). Calculating offsets...');
+        //console.log('Parent room styling: ' + getComputedStyle(base_div));
+        //console.log('Parent room width: ' + getComputedStyle(base_div).getPropertyValue('width'));
+        //console.log('Parent room top: ' + getComputedStyle(base_div).getPropertyValue('top'));
+        //console.log('Parent room left: ' + getComputedStyle(base_div).getPropertyValue('left'));
+        left_offset = left_offset_for(room_div, base_connection_side, base_div);
+        top_offset = getComputedStyle(base_div).getPropertyValue('top');
+    }
 
     //console.log('room offsets:');
     //console.log('left offset:' + left_offset);
     //console.log('top offset:' + top_offset);
-    //console.log('map room rotation:' + map_room.rotation);
-    var room_div = draw_room(map_room, left_offset, top_offset, null);
+    //console.log('map room rotation:' + room_object.rotation);
+    position_room(room_div, left_offset, top_offset, null);
 
 	// Generate any connecting rooms
 	var connected_rooms = [];
 
 	// Check for left adjoining room
-	if (map_room.left_room) {
+	if (room_object.left_room) {
 		 //console.log('Adding a left room');
         console.log('Adding a left room to div "' + room_div.id + '"');
 
         new_room_data = {
-            room: map_room.left_room,
-            parent_div: room_div
+            room: room_object.left_room,
+            parent_div: room_div,
+            side: 'left'
         };
 
 		connected_rooms.push(new_room_data);
 	}
 
 	// Check for top adjoining room
-    if (map_room.top_room) {
+    if (room_object.top_room) {
         console.log('Adding a top room');
         new_room_data = {
-            room: map_room.top_room,
-            parent_div: room_div
+            room: room_object.top_room,
+            parent_div: room_div,
+            side: 'top'
         };
 
 		connected_rooms.push(new_room_data);
 	}
 
 	// Check for right adjoining room
-	if (map_room.right_room) {
+	if (room_object.right_room) {
         console.log('Adding a right room to div "' + room_div.id + '"');
         new_room_data = {
-            room: map_room.right_room,
-            parent_div: room_div
+            room: room_object.right_room,
+            parent_div: room_div,
+            side: 'right'
         };
 
 		connected_rooms.push(new_room_data);
 	}
 
 	// Check for bottom adjoining room
-	if (map_room.bottom_room) {
+	if (room_object.bottom_room) {
         console.log('Adding a bottom room');
         var new_room_data = {
-            room: map_room.bottom_room,
-            parent_div: room_div
+            room: room_object.bottom_room,
+            parent_div: room_div,
+            side: 'bottom'
         };
 
 		connected_rooms.push(new_room_data);
@@ -487,6 +498,32 @@ function build_room(room_data) {
 
 	// Return any connected rooms
 	return connected_rooms;
+}
+
+function left_offset_for(connected_room_div, base_connection_side, base_room_div) {
+    var left_offset;
+
+    switch (base_connection_side) {
+        case 'left':
+            left_offset = -(parseInt(getComputedStyle(connected_room_div).getPropertyValue('width'))) +
+                parseInt(base_room_div.style.left) +
+                'px';
+            break;
+        //case 'top':
+        //    break;
+        case 'right':
+            left_offset = (parseInt(getComputedStyle(base_room_div).getPropertyValue('width')) +
+                parseInt(base_room_div.style.left)) +
+                'px';
+            break;
+        //case 'bottom':
+        //    break;
+        default:
+            console.log("Don't know how to handle a connection side of '"
+                + base_connection_side + "'");
+    }
+
+    return left_offset;
 }
 
 function rebuild_map() {
