@@ -12,7 +12,7 @@ if (typeof Array.prototype.regXIndexOf === 'undefined') {
 }
 
 
-var map_rooms = [new CorridorRoom(0)];
+var map_rooms = [new TCorridorRoom(0)];
 var spawned_room;
 var room_ids = 1;
 var room_connections_clicked = 0;
@@ -266,7 +266,7 @@ function spawn_room() {
 	// Determine new room
 	var next_room_id = room_ids++;
 	//console.log('next room id is: ' + next_room_id);
-	spawned_room = new CorridorRoom(next_room_id); // Just a hard-coded corridor for now
+	spawned_room = new TCorridorRoom(next_room_id); // Just a hard-coded corridor for now
     spawned_room.style_classes.push('spawned_room');
 	//console.log('new rooms id: ' + next_room.id);
 	// Display new room and rotation button
@@ -348,9 +348,9 @@ function connect_new_room() {
 
 
     // There should be two rooms found with highlighting and the newly spawned room should have the higher id
-    var connected_room_set = rooms_to_connect[0];
+    var base_room_set = rooms_to_connect[0];
     var spawned_room_set = rooms_to_connect[1];
-    var connected_room_object;
+    var base_room_object;
     var spawned_room_object = spawned_room;
 
 
@@ -359,8 +359,8 @@ function connect_new_room() {
         //console.log('checking object: ' + map_room.id);
         //console.log('connecting room id: ' + connected_room_set.room_element.id);
 
-        if (map_room.id == connected_room_set.room_element.id) {
-            connected_room_object = map_room;
+        if (map_room.id == base_room_set.room_element.id) {
+            base_room_object = map_room;
         }
     }
 
@@ -369,45 +369,49 @@ function connect_new_room() {
     //console.log('spawned:' + spawned_room_object);
 
     // Connect objects
-    connect_rooms(connected_room_object, connected_room_set.connection_side, spawned_room_object, spawned_room_set.connection_side);
+    connect_rooms(base_room_object, base_room_set.connection_side, spawned_room_object, spawned_room_set.connection_side);
     map_rooms.push(spawned_room_object);
     spawned_room_object.style_classes.splice(spawned_room_object.style_classes.indexOf('spawned_room'), 1);
 
     console.log('connection complete');
 }
 
-function connect_rooms(connected_room_object, connected_room_set_connection_side, spawned_room_object, spawned_room_set_connection_side) {
+function connect_rooms(base_room_object, base_room_set_connection_side, connected_room_object, connected_room_set_connection_side) {
+
+    switch (base_room_set_connection_side) {
+        case 'top':
+            base_room_object.top_room = connected_room_object;
+            break;
+        case 'right':
+            base_room_object.right_room = connected_room_object;
+            break;
+        case 'bottom':
+            base_room_object.bottom_room = connected_room_object;
+            break;
+        case 'left':
+            base_room_object.left_room = connected_room_object;
+            break;
+        default:
+            console.log("Don't know how to handle a connection side of '"
+                + base_room_set_connection_side + "'");
+    }
 
     switch (connected_room_set_connection_side) {
-        //case 'top':
-        //    break;
-        case 'right':
-            connected_room_object.right_room = spawned_room_object;
+        case 'top':
+            connected_room_object.top_room = base_room_object;
             break;
-        //case 'bottom':
-        //    break;
+        case 'right':
+            connected_room_object.right_room = base_room_object;
+            break;
+        case 'bottom':
+            connected_room_object.bottom_room = base_room_object;
+            break;
         case 'left':
-            connected_room_object.left_room = spawned_room_object;
+            connected_room_object.left_room = base_room_object;
             break;
         default:
             console.log("Don't know how to handle a connection side of '"
                 + connected_room_set_connection_side + "'");
-    }
-
-    switch (spawned_room_set_connection_side) {
-        //case 'top':
-        //    break;
-        case 'right':
-            spawned_room_object.right_room = connected_room_object;
-            break;
-        //case 'bottom':
-        //    break;
-        case 'left':
-            spawned_room_object.left_room = connected_room_object;
-            break;
-        default:
-            console.log("Don't know how to handle a connection side of '"
-                + spawned_room_set_connection_side + "'");
     }
 }
 
@@ -433,8 +437,9 @@ function build_room(room_data) {
         //console.log('Parent room width: ' + getComputedStyle(base_div).getPropertyValue('width'));
         //console.log('Parent room top: ' + getComputedStyle(base_div).getPropertyValue('top'));
         //console.log('Parent room left: ' + getComputedStyle(base_div).getPropertyValue('left'));
+        //console.log('Connectd room is to the: ' + base_connection_side);
         left_offset = left_offset_for(room_div, base_connection_side, base_div);
-        top_offset = getComputedStyle(base_div).getPropertyValue('top');
+        top_offset = top_offset_for(room_div, base_connection_side, base_div);
     }
 
     //console.log('room offsets:');
@@ -445,6 +450,14 @@ function build_room(room_data) {
 
 	// Generate any connecting rooms
 	var connected_rooms = [];
+
+    //console.log('Adjoining rooms -');
+    //console.log('left room: ' + room_object.left_room);
+    //console.log('top room: ' + room_object.top  );
+    //console.log('right room: ' + room_object.right);
+    //console.log('bottom room: ' + room_object.bottom);
+
+
 
 	// Check for left adjoining room
 	if (room_object.left_room) {
@@ -462,7 +475,7 @@ function build_room(room_data) {
 
 	// Check for top adjoining room
     if (room_object.top_room) {
-        console.log('Adding a top room');
+        //console.log('Adding a top room to div "' + room_div.id + '"');
         new_room_data = {
             room: room_object.top_room,
             parent_div: room_div,
@@ -486,7 +499,7 @@ function build_room(room_data) {
 
 	// Check for bottom adjoining room
 	if (room_object.bottom_room) {
-        console.log('Adding a bottom room');
+        //console.log('Adding a bottom room to div "' + room_div.id + '"');
         var new_room_data = {
             room: room_object.bottom_room,
             parent_div: room_div,
@@ -509,21 +522,55 @@ function left_offset_for(connected_room_div, base_connection_side, base_room_div
                 parseInt(base_room_div.style.left) +
                 'px';
             break;
-        //case 'top':
-        //    break;
+        case 'top':
+            left_offset = parseInt(base_room_div.style.left) +
+                'px';
+            break;
         case 'right':
             left_offset = (parseInt(getComputedStyle(base_room_div).getPropertyValue('width')) +
                 parseInt(base_room_div.style.left)) +
                 'px';
             break;
-        //case 'bottom':
-        //    break;
+        case 'bottom':
+            left_offset = parseInt(base_room_div.style.left) +
+                'px';
+            break;
         default:
             console.log("Don't know how to handle a connection side of '"
                 + base_connection_side + "'");
     }
 
     return left_offset;
+}
+
+function top_offset_for(connected_room_div, base_connection_side, base_room_div) {
+    var top_offset;
+
+    switch (base_connection_side) {
+        case 'left':
+            top_offset = parseInt(base_room_div.style.top) +
+                'px';
+            break;
+        case 'top':
+            top_offset = -(parseInt(getComputedStyle(connected_room_div).getPropertyValue('height'))) +
+                parseInt(base_room_div.style.top) +
+                'px';
+            break;
+        case 'right':
+            top_offset = parseInt(base_room_div.style.top) +
+                'px';
+            break;
+        case 'bottom':
+            top_offset = parseInt(getComputedStyle(base_room_div).getPropertyValue('height')) +
+                parseInt(base_room_div.style.top) +
+                'px';
+            break;
+        default:
+            console.log("Don't know how to handle a connection side of '"
+                + base_connection_side + "'");
+    }
+
+    return top_offset;
 }
 
 function rebuild_map() {
@@ -546,7 +593,8 @@ function rebuild_map() {
 
 	draw_queue.push({
 		room : map_rooms[0],
-		parent_div : null
+        parent_div : null,
+        side : null
 	});
 
 	// Draw next room in queue unless it has already been drawn and add any
