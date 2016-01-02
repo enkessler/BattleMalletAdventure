@@ -245,13 +245,18 @@ function highlight_connection_nodes_on_room(room_object) {
 				//console.log('setting toggle function');
 				toggle_connection_room(this);
                 if (room_connections_clicked == 2) {
-                    connect_new_room();
-                    var rotation_button = document.getElementById('rotate_room_button');
+                    var validity_data = is_valid_connection_pair();
+                    if (validity_data.validity) {
+                        connect_new_room();
+                        var rotation_button = document.getElementById('rotate_room_button');
+                        rotation_button.style.display = 'none';
 
-                    rotation_button.style.display = 'none';
-
-                    rebuild_map();
-                    room_connections_clicked = 0;
+                        rebuild_map();
+                        room_connections_clicked = 0;
+                    } else {
+                        alert(validity_data.message);
+                        toggle_connection_room(this);
+                    }
                 }
 			};
 
@@ -260,6 +265,58 @@ function highlight_connection_nodes_on_room(room_object) {
 			parent_element.appendChild(overlay_div);
 		}
 	}
+}
+
+function is_valid_connection_pair() {
+    //console.log('Checking for valid room connection...');
+
+    var connection_data = get_room_connection_data();
+    var valid;
+    var message;
+
+    switch (connection_data.base_side) {
+        case 'left':
+            if (connection_data.connecting_side == 'right') {
+                valid = true;
+            } else {
+                valid = false;
+                message = 'Cannot make a connection between the ' + connection_data.base_side + ' and ' + connection_data.connecting_side + ' sides of two rooms';
+            }
+            break;
+        case 'top':
+            if (connection_data.connecting_side == 'bottom') {
+                valid = true;
+            } else {
+                valid = false;
+                message = 'Cannot make a connection between the ' + connection_data.base_side + ' and ' + connection_data.connecting_side + ' sides of two rooms';
+            }
+            break;
+        case 'right':
+            if (connection_data.connecting_side == 'left') {
+                valid = true;
+            } else {
+                valid = false;
+                message = 'Cannot make a connection between the ' + connection_data.base_side + ' and ' + connection_data.connecting_side + ' sides of two rooms';
+            }
+            break;
+        case 'bottom':
+            if (connection_data.connecting_side == 'top') {
+                valid = true;
+            } else {
+                valid = false;
+                message = 'Cannot make a connection between the ' + connection_data.base_side + ' and ' + connection_data.connecting_side + ' sides of two rooms';
+            }
+            break;
+        default:
+            console.log("Don't know how to connection side of '"
+                + connection_data.base_side + "'");
+    }
+
+
+    return {
+        validity: valid,
+        message: message
+    };
 }
 
 function spawn_room() {
@@ -288,7 +345,21 @@ function spawn_room() {
 }
 
 function connect_new_room() {
-    //console.log('connecting new room');
+    //console.log('Connecting new room...');
+
+    // Get connection data
+    var connection_data = get_room_connection_data();
+
+    // Connect objects
+    connect_rooms(connection_data.base_room, connection_data.base_side, connection_data.connecting_room, connection_data.connecting_side);
+    map_rooms.push(connection_data.connecting_room);
+    connection_data.connecting_room.style_classes.splice(connection_data.connecting_room.style_classes.indexOf('spawned_room'), 1);
+
+    //console.log('connection complete');
+}
+
+function get_room_connection_data() {
+    //console.log('getting room connection data...');
     var connection_overlays = $('.highlighted_connection');
 
     var room_sets = [];
@@ -368,12 +439,12 @@ function connect_new_room() {
     //console.log('connected_room:' + connected_room_object);
     //console.log('spawned:' + spawned_room_object);
 
-    // Connect objects
-    connect_rooms(base_room_object, base_room_set.connection_side, spawned_room_object, spawned_room_set.connection_side);
-    map_rooms.push(spawned_room_object);
-    spawned_room_object.style_classes.splice(spawned_room_object.style_classes.indexOf('spawned_room'), 1);
-
-    //console.log('connection complete');
+    return {
+        base_room: base_room_object,
+        base_side: base_room_set.connection_side,
+        connecting_room: spawned_room_object,
+        connecting_side: spawned_room_set.connection_side
+    };
 }
 
 function connect_rooms(base_room_object, base_room_set_connection_side, connected_room_object, connected_room_set_connection_side) {
