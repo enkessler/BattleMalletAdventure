@@ -59,68 +59,68 @@ div.corridor_node_rotate_90, div.corridor_node_rotate_270 {
   width: 35%;
 }
 
-div.corridor_node_col_1_rotate_0, div.corridor_node_col_1_rotate_180 {
+div.corridor_node_col_1_rotate_0, div.corridor_node_col_6_rotate_180 {
   left: 6.25%;
 }
 
-div.corridor_node_col_1_rotate_90, div.corridor_node_col_1_rotate_270 {
+div.corridor_node_col_1_rotate_90, div.corridor_node_col_6_rotate_270 {
   top: 6.25%;
 }
 
-div.corridor_node_col_2_rotate_0, div.corridor_node_col_2_rotate_180 {
+div.corridor_node_col_2_rotate_0, div.corridor_node_col_5_rotate_180 {
   left: 21%;
 }
 
-div.corridor_node_col_2_rotate_90, div.corridor_node_col_2_rotate_270 {
+div.corridor_node_col_2_rotate_90, div.corridor_node_col_5_rotate_270 {
   top: 21%;
 }
 
-div.corridor_node_col_3_rotate_0, div.corridor_node_col_3_rotate_180 {
+div.corridor_node_col_3_rotate_0, div.corridor_node_col_4_rotate_180 {
   left: 35%;
 }
 
-div.corridor_node_col_3_rotate_90, div.corridor_node_col_3_rotate_270 {
+div.corridor_node_col_3_rotate_90, div.corridor_node_col_4_rotate_270 {
   top: 35%;
 }
 
-div.corridor_node_col_4_rotate_0, div.corridor_node_col_4_rotate_180 {
+div.corridor_node_col_4_rotate_0, div.corridor_node_col_3_rotate_180 {
   left: 50%;
 }
 
-div.corridor_node_col_4_rotate_90, div.corridor_node_col_4_rotate_270 {
+div.corridor_node_col_4_rotate_90, div.corridor_node_col_3_rotate_270 {
   top: 50%;
 }
 
-div.corridor_node_col_5_rotate_0, div.corridor_node_col_5_rotate_180 {
+div.corridor_node_col_5_rotate_0, div.corridor_node_col_2_rotate_180 {
   left: 65%;
 }
 
-div.corridor_node_col_5_rotate_90, div.corridor_node_col_5_rotate_270 {
+div.corridor_node_col_5_rotate_90, div.corridor_node_col_2_rotate_270 {
   top: 65%;
 }
 
-div.corridor_node_col_6_rotate_0, div.corridor_node_col_6_rotate_180 {
+div.corridor_node_col_6_rotate_0, div.corridor_node_col_1_rotate_180 {
   left: 80%;
 }
 
-div.corridor_node_col_6_rotate_90, div.corridor_node_col_6_rotate_270 {
+div.corridor_node_col_6_rotate_90, div.corridor_node_col_1_rotate_270 {
   top: 80%;
 }
 
-div.corridor_node_row_1_rotate_0, div.corridor_node_row_1_rotate_180 {
+div.corridor_node_row_1_rotate_0, div.corridor_node_row_2_rotate_180 {
   top: 15%;
 }
 
-div.corridor_node_row_1_rotate_90, div.corridor_node_row_1_rotate_270 {
-  left: 15%;
+div.corridor_node_row_1_rotate_90, div.corridor_node_row_2_rotate_270 {
+  left: 51%;
 }
 
-div.corridor_node_row_2_rotate_0, div.corridor_node_row_2_rotate_180 {
+div.corridor_node_row_1_rotate_180, div.corridor_node_row_2_rotate_0 {
   top: 51%;
 }
 
-div.corridor_node_row_2_rotate_90, div.corridor_node_row_2_rotate_270 {
-  left: 51%;
+div.corridor_node_row_1_rotate_270, div.corridor_node_row_2_rotate_90 {
+  left: 15%;
 }
 
 div.t_corridor_room_rotate_0, div.t_corridor_room_rotate_180 {
@@ -165,66 +165,66 @@ div.t_corridor_node_rotate_90, div.t_corridor_node_rotate_270 {
   width: 35%;
 }
 
-div.t_corridor_node_col_1_rotate_0, div.t_corridor_node_col_1_rotate_180 {
+div.t_corridor_node_col_1_rotate_0, div.t_corridor_node_col_6_rotate_180 {
   left: 6.25%;
 }
 
-div.t_corridor_node_col_1_rotate_90, div.t_corridor_node_col_1_rotate_270 {
+div.t_corridor_node_col_1_rotate_90, div.t_corridor_node_col_6_rotate_270 {
   top: 6.25%;
 }
 
-div.t_corridor_node_col_2_rotate_0, div.t_corridor_node_col_2_rotate_180 {
+div.t_corridor_node_col_2_rotate_0, div.t_corridor_node_col_5_rotate_180 {
   left: 21%;
 }
 
-div.t_corridor_node_col_2_rotate_90, div.t_corridor_node_col_2_rotate_270 {
+div.t_corridor_node_col_2_rotate_90, div.t_corridor_node_col_5_rotate_270 {
   top: 21%;
 }
 
-div.t_corridor_node_col_3_rotate_0, div.t_corridor_node_col_3_rotate_180 {
+div.t_corridor_node_col_3_rotate_0, div.t_corridor_node_col_4_rotate_180 {
   left: 35%;
 }
 
-div.t_corridor_node_col_3_rotate_90, div.t_corridor_node_col_3_rotate_270 {
+div.t_corridor_node_col_3_rotate_90, div.t_corridor_node_col_4_rotate_270 {
   top: 35%;
 }
 
-div.t_corridor_node_col_4_rotate_0, div.t_corridor_node_col_4_rotate_180 {
+div.t_corridor_node_col_4_rotate_0, div.t_corridor_node_col_3_rotate_180 {
   left: 50%;
 }
 
-div.t_corridor_node_col_4_rotate_90, div.t_corridor_node_col_4_rotate_270 {
+div.t_corridor_node_col_4_rotate_90, div.t_corridor_node_col_3_rotate_270 {
   top: 50%;
 }
 
-div.t_corridor_node_col_5_rotate_0, div.t_corridor_node_col_5_rotate_180 {
+div.t_corridor_node_col_5_rotate_0, div.t_corridor_node_col_2_rotate_180 {
   left: 65%;
 }
 
-div.t_corridor_node_col_5_rotate_90, div.t_corridor_node_col_5_rotate_270 {
+div.t_corridor_node_col_5_rotate_90, div.t_corridor_node_col_2_rotate_270 {
   top: 65%;
 }
 
-div.t_corridor_node_col_6_rotate_0, div.t_corridor_node_col_6_rotate_180 {
+div.t_corridor_node_col_6_rotate_0, div.t_corridor_node_col_1_rotate_180 {
   left: 80%;
 }
 
-div.t_corridor_node_col_6_rotate_90, div.t_corridor_node_col_6_rotate_270 {
+div.t_corridor_node_col_6_rotate_90, div.t_corridor_node_col_1_rotate_270 {
   top: 80%;
 }
 
-div.t_corridor_node_row_1_rotate_0, div.t_corridor_node_row_1_rotate_180 {
+div.t_corridor_node_row_1_rotate_0, div.t_corridor_node_row_2_rotate_180 {
   top: 15%;
 }
 
-div.t_corridor_node_row_1_rotate_90, div.t_corridor_node_row_1_rotate_270 {
-  left: 15%;
+div.t_corridor_node_row_1_rotate_90, div.t_corridor_node_row_2_rotate_270 {
+  left: 51%;
 }
 
-div.t_corridor_node_row_2_rotate_0, div.t_corridor_node_row_2_rotate_180 {
+div.t_corridor_node_row_1_rotate_180, div.t_corridor_node_row_2_rotate_0 {
   top: 51%;
 }
 
-div.t_corridor_node_row_2_rotate_90, div.t_corridor_node_row_2_rotate_270 {
-  left: 51%;
+div.t_corridor_node_row_1_rotate_270, div.t_corridor_node_row_2_rotate_90 {
+  left: 15%;
 }
