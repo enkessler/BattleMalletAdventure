@@ -272,41 +272,47 @@ function is_valid_connection_pair() {
   var valid;
   var message;
 
-  switch (connection_data.base_side) {
-    case 'left':
-      if (connection_data.connecting_side == 'right') {
-        valid = true;
-      } else {
-        valid = false;
-        message = 'Cannot make a connection between the ' + connection_data.base_side + ' and ' + connection_data.connecting_side + ' sides of two rooms';
-      }
-      break;
-    case 'top':
-      if (connection_data.connecting_side == 'bottom') {
-        valid = true;
-      } else {
-        valid = false;
-        message = 'Cannot make a connection between the ' + connection_data.base_side + ' and ' + connection_data.connecting_side + ' sides of two rooms';
-      }
-      break;
-    case 'right':
-      if (connection_data.connecting_side == 'left') {
-        valid = true;
-      } else {
-        valid = false;
-        message = 'Cannot make a connection between the ' + connection_data.base_side + ' and ' + connection_data.connecting_side + ' sides of two rooms';
-      }
-      break;
-    case 'bottom':
-      if (connection_data.connecting_side == 'top') {
-        valid = true;
-      } else {
-        valid = false;
-        message = 'Cannot make a connection between the ' + connection_data.base_side + ' and ' + connection_data.connecting_side + ' sides of two rooms';
-      }
-      break;
-    default:
-      console.log("Don't know how to connection side of '" + connection_data.base_side + "'");
+  // Need to have two different rooms to connect
+  if ((connection_data.connecting_room === undefined) || (connection_data.base_room === undefined)) {
+    valid = false;
+    message = 'Must choose two different rooms for connection';
+  } else {
+    switch (connection_data.base_side) {
+      case 'left':
+        if (connection_data.connecting_side == 'right') {
+          valid = true;
+        } else {
+          valid = false;
+          message = 'Cannot make a connection between the ' + connection_data.base_side + ' and ' + connection_data.connecting_side + ' sides of two rooms';
+        }
+        break;
+      case 'top':
+        if (connection_data.connecting_side == 'bottom') {
+          valid = true;
+        } else {
+          valid = false;
+          message = 'Cannot make a connection between the ' + connection_data.base_side + ' and ' + connection_data.connecting_side + ' sides of two rooms';
+        }
+        break;
+      case 'right':
+        if (connection_data.connecting_side == 'left') {
+          valid = true;
+        } else {
+          valid = false;
+          message = 'Cannot make a connection between the ' + connection_data.base_side + ' and ' + connection_data.connecting_side + ' sides of two rooms';
+        }
+        break;
+      case 'bottom':
+        if (connection_data.connecting_side == 'top') {
+          valid = true;
+        } else {
+          valid = false;
+          message = 'Cannot make a connection between the ' + connection_data.base_side + ' and ' + connection_data.connecting_side + ' sides of two rooms';
+        }
+        break;
+      default:
+        console.log("Don't know how to connection side of '" + connection_data.base_side + "'");
+    }
   }
 
 
@@ -433,6 +439,16 @@ function get_room_connection_data() {
   //console.log('room_objects:');
   //console.log('connected_room:' + connected_room_object);
   //console.log('spawned:' + spawned_room_object);
+
+  // It is possible that the same room has been chosen for both connections, in which case there will be no second room
+  if (spawned_room_set === undefined) {
+    spawned_room_object = undefined;
+    spawned_room_set = {
+      room_element: undefined,
+      connection_side: undefined
+    };
+  }
+
 
   return {
     base_room: base_room_object,
