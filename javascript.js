@@ -382,7 +382,7 @@ function get_room_connection_data() {
     //    console.log('side:' + room_set.connection_side);
     //}
 
-    var found_ids = [8];
+    var found_ids = [];
     var rooms_to_connect = [];
 
     for (i = 0; i < room_sets.length; ++i) {
