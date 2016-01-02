@@ -37,11 +37,11 @@ $(document).ready(function() {
 });
 
 function rotate_room(room_object) {
-    console.log('rotating room ' + room_object.id);
+    //console.log('rotating room ' + room_object.id);
     var room_div = document.getElementById(room_object.id);
     var rotation = room_object.rotation;
     var new_rotation;
-    console.log('starting rotation: ' + rotation);
+    //console.log('starting rotation: ' + rotation);
 
     switch (rotation) {
         case 0:
@@ -60,11 +60,11 @@ function rotate_room(room_object) {
             console.log("Don't know how to handle a rotation of '"
                 + rotation + "'");
     }
-    console.log('new rotation: ' + new_rotation);
+    //console.log('new rotation: ' + new_rotation);
     var new_class = room_div.className.replace(new RegExp('_rotate_' + rotation,
         'g'), '_rotate_' + new_rotation);
 
-    console.log('new class: ' + new_class);
+    //console.log('new class: ' + new_class);
     room_div.className = new_class;
     room_object.rotation = new_rotation;
 
@@ -126,16 +126,16 @@ function position_room(room_div, left_offset, top_offset, z_index) {
 }
 
 function toggle_connection_room(overlay_element) {
-	console.log('toggling overlay element');
+	//console.log('toggling overlay element');
 	var connection_side = determine_connection_side(overlay_element.parentElement);
-	console.log('connection side: ' + connection_side);
+	//console.log('connection side: ' + connection_side);
 
 	var room_element = overlay_element.parentElement.parentElement;
 	var relevant_connection_overlays = get_connection_overlays_for(connection_side, room_element);
 
 
 	for (var i = 0; i < relevant_connection_overlays.length; ++i) {
-		console.log('toggling node highlighting');
+		//console.log('toggling node highlighting');
         var element = relevant_connection_overlays[i];
 		if (element.className.match(/highlighted_connection/) != null) {
             element.className = element.className.replace('highlighted_connection', '');
@@ -148,27 +148,27 @@ function toggle_connection_room(overlay_element) {
 	}else{
 		--room_connections_clicked;
 	}
-	console.log('activated room connections: ' + room_connections_clicked);
+	//console.log('activated room connections: ' + room_connections_clicked);
 }
 
 function get_connection_overlays_for(connection_side, room_element) {
 	child_elements = room_element.children;
 	var relevant_room_nodes = [];
 
-	console.log('child elements found: ' + child_elements);
+	//console.log('child elements found: ' + child_elements);
 	for (var i = 0; i < child_elements.length; ++i) {
 		element = child_elements[i];
-		console.log('checking elemetn: ' + element);
-		console.log('with classes: ' + element.className);
+		//console.log('checking elemetn: ' + element);
+		//console.log('with classes: ' + element.className);
 		if (element.className.match(new RegExp(connection_side + '_connect_')) != null) {
-			console.log('connecting node found');
+			//console.log('connecting node found');
 			relevant_room_nodes.push(element);
 		}
 	}
 
 	var node_overlays = [];
 
-	console.log('relevant room nodes found: ' + relevant_room_nodes);
+	//console.log('relevant room nodes found: ' + relevant_room_nodes);
 
 	for (i = 0; i < relevant_room_nodes.length; ++i) {
 		var child_elements = relevant_room_nodes[i].childNodes;
@@ -176,7 +176,7 @@ function get_connection_overlays_for(connection_side, room_element) {
 		for (var j = 0; j < child_elements.length; ++j) {
 			var element = child_elements[j];
 			if (element.className.match(/connection_node/) != null) {
-				console.log('overlay div found');
+				//console.log('overlay div found');
 				node_overlays.push(element);
 			}
 		}
@@ -186,11 +186,11 @@ function get_connection_overlays_for(connection_side, room_element) {
 }
 
 function determine_connection_side(room_node_element) {
-	console.log('determining connection side for element:' + room_node_element.id);
+	//console.log('determining connection side for element:' + room_node_element.id);
 	var parent_element = room_node_element;
-	console.log('parent element classes: ' + parent_element.className);
+	//console.log('parent element classes: ' + parent_element.className);
 	var element_classes = parent_element.className.split(' ');
-	console.log('parent element classes: ' + element_classes);
+	//console.log('parent element classes: ' + element_classes);
 	var found = element_classes.regXIndexOf(/left_connect/);
 	//console.log('index found: ' + found);
 
@@ -221,11 +221,11 @@ function determine_connection_side(room_node_element) {
 }
 
 function highlight_connection_nodes() {
-    console.log('highlighting connection nodes...');
+    //console.log('highlighting connection nodes...');
     //console.log(map_rooms.length + ' rooms to highlight');
     for (var i = 0; i < map_rooms.length; i++) {
 		var room_object = map_rooms[i];
-		console.log('checking room ' + i);
+		//console.log('checking room ' + i);
 
 		highlight_connection_nodes_on_room(room_object);
 	}
@@ -242,7 +242,7 @@ function highlight_connection_nodes_on_room(room_object) {
 			overlay_div.className = 'connection_node';
 
 			overlay_div.onclick = function () {
-				console.log('setting toggle function');
+				//console.log('setting toggle function');
 				toggle_connection_room(this);
                 if (room_connections_clicked == 2) {
                     connect_new_room();
@@ -279,7 +279,7 @@ function spawn_room() {
 			'top')) + 50)
 			+ 'px';
 
-	console.log('next room rotation:' + spawned_room.rotation);
+	//console.log('next room rotation:' + spawned_room.rotation);
     var room_div = draw_room(spawned_room);
     position_room(room_div, left_offset, top_offset, 5);
 
@@ -288,7 +288,7 @@ function spawn_room() {
 }
 
 function connect_new_room() {
-    console.log('connecting new room');
+    //console.log('connecting new room');
     var connection_overlays = $('.highlighted_connection');
 
     var room_sets = [];
@@ -373,7 +373,7 @@ function connect_new_room() {
     map_rooms.push(spawned_room_object);
     spawned_room_object.style_classes.splice(spawned_room_object.style_classes.indexOf('spawned_room'), 1);
 
-    console.log('connection complete');
+    //console.log('connection complete');
 }
 
 function connect_rooms(base_room_object, base_room_set_connection_side, connected_room_object, connected_room_set_connection_side) {
@@ -462,7 +462,7 @@ function build_room(room_data) {
 	// Check for left adjoining room
 	if (room_object.left_room) {
 		 //console.log('Adding a left room');
-        console.log('Adding a left room to div "' + room_div.id + '"');
+        //console.log('Adding a left room to div "' + room_div.id + '"');
 
         new_room_data = {
             room: room_object.left_room,
@@ -487,7 +487,7 @@ function build_room(room_data) {
 
 	// Check for right adjoining room
 	if (room_object.right_room) {
-        console.log('Adding a right room to div "' + room_div.id + '"');
+        //console.log('Adding a right room to div "' + room_div.id + '"');
         new_room_data = {
             room: room_object.right_room,
             parent_div: room_div,
@@ -580,7 +580,7 @@ function rebuild_map() {
 	while (map.firstChild) {
 		map.removeChild(map.firstChild)
 	}
-    console.log('Drawing ' + map_rooms.length + ' rooms');
+    //console.log('Drawing ' + map_rooms.length + ' rooms');
     for (var i = 0; i < map_rooms.length; i++) {
         //console.log('Setting room ' + i + ' to undrawn')
 		map_rooms[i].drawn = false;

@@ -72,10 +72,10 @@ function TCorridorRoom(id, rotation) {
 
     // Default values
     if (rotation === undefined) {
-        console.log('using default rotatation');
+        //console.log('using default rotatation');
         this.rotation = 0;
     } else {
-        console.log('using rotatation' + rotation);
+        //console.log('using rotatation' + rotation);
         this.rotation = rotation;
     }
 
