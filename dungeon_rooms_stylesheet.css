@@ -5,7 +5,7 @@ div.dungeon_room_rotate_0, div.dungeon_room_rotate_90, div.dungeon_room_rotate_1
   border: 2px solid blue;
 }
 
-div.connection_node {
+div.connection_node_overlay {
   position: absolute;
   background-color: red;
   height: 100%;
