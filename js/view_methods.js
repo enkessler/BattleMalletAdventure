@@ -75,14 +75,18 @@ function left_offset_for(connected_room_div, base_connection_side, base_room_div
         parseInt(base_room_div.style.left);
       break;
     case 'top':
-      left_offset = parseInt(base_room_div.style.left);
+      var width_1 = parseInt(getComputedStyle(base_room_div).getPropertyValue('width'));
+      var width_2 = parseInt(getComputedStyle(connected_room_div).getPropertyValue('width'));
+      left_offset = parseInt(base_room_div.style.left) - length_differential(width_1, width_2);
       break;
     case 'right':
       left_offset = (parseInt(getComputedStyle(base_room_div).getPropertyValue('width')) +
       parseInt(base_room_div.style.left));
       break;
     case 'bottom':
-      left_offset = parseInt(base_room_div.style.left);
+      var width_1 = parseInt(getComputedStyle(base_room_div).getPropertyValue('width'));
+      var width_2 = parseInt(getComputedStyle(connected_room_div).getPropertyValue('width'));
+      left_offset = parseInt(base_room_div.style.left) - length_differential(width_1, width_2);
       break;
     default:
       console.log("Don't know how to handle a connection side of '" + base_connection_side + "'");
@@ -97,14 +101,18 @@ function top_offset_for(connected_room_div, base_connection_side, base_room_div)
 
   switch (base_connection_side) {
     case 'left':
-      top_offset = parseInt(base_room_div.style.top);
+      var height_1 = parseInt(getComputedStyle(base_room_div).getPropertyValue('height'));
+      var height_2 = parseInt(getComputedStyle(connected_room_div).getPropertyValue('height'));
+      top_offset = parseInt(base_room_div.style.top) - length_differential(height_1, height_2);
       break;
     case 'top':
       top_offset = -(parseInt(getComputedStyle(connected_room_div).getPropertyValue('height'))) +
         parseInt(base_room_div.style.top);
       break;
     case 'right':
-      top_offset = parseInt(base_room_div.style.top);
+      var height_1 = parseInt(getComputedStyle(base_room_div).getPropertyValue('height'));
+      var height_2 = parseInt(getComputedStyle(connected_room_div).getPropertyValue('height'));
+      top_offset = parseInt(base_room_div.style.top) - length_differential(height_1, height_2);
       break;
     case 'bottom':
       top_offset = parseInt(getComputedStyle(base_room_div).getPropertyValue('height')) +
@@ -116,4 +124,17 @@ function top_offset_for(connected_room_div, base_connection_side, base_room_div)
 
 
   return top_offset;
+}
+
+function length_differential(length_1, length_2) {
+  //console.log('Calculating height differential...');
+  //console.log('length 1: ' + length_1);
+  //console.log('length 2: ' + length_2);
+
+  var differential = (length_2 / 2) - (length_1 / 2);
+
+  //console.log('differential (): ' + differential);
+
+
+  return differential;
 }
