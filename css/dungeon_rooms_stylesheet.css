@@ -28,19 +28,19 @@ div.corridor_room_rotate_90, div.corridor_room_rotate_270 {
 }
 
 div.corridor_room_rotate_0 {
-  background-image: url('images/corridor_white_0.gif');
+  background-image: url('../images/corridor_white_0.gif');
 }
 
 div.corridor_room_rotate_90 {
-  background-image: url('images/corridor_white_90.gif');
+  background-image: url('../images/corridor_white_90.gif');
 }
 
 div.corridor_room_rotate_180 {
-  background-image: url('images/corridor_white_180.gif');
+  background-image: url('../images/corridor_white_180.gif');
 }
 
 div.corridor_room_rotate_270 {
-  background-image: url('images/corridor_white_270.gif');
+  background-image: url('../images/corridor_white_270.gif');
 }
 
 div.corridor_node_rotate_0, div.corridor_node_rotate_90, div.corridor_node_rotate_180,
@@ -134,19 +134,19 @@ div.t_corridor_room_rotate_90, div.t_corridor_room_rotate_270 {
 }
 
 div.t_corridor_room_rotate_0 {
-  background-image: url('images/t_corridor_0.gif');
+  background-image: url('../images/t_corridor_0.gif');
 }
 
 div.t_corridor_room_rotate_90 {
-  background-image: url('images/t_corridor_90.gif');
+  background-image: url('../images/t_corridor_90.gif');
 }
 
 div.t_corridor_room_rotate_180 {
-  background-image: url('images/t_corridor_180.gif');
+  background-image: url('../images/t_corridor_180.gif');
 }
 
 div.t_corridor_room_rotate_270 {
-  background-image: url('images/t_corridor_270.gif');
+  background-image: url('../images/t_corridor_270.gif');
 }
 
 div.t_corridor_node_rotate_0, div.t_corridor_node_rotate_90, div.t_corridor_node_rotate_180,
