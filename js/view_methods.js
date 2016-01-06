@@ -141,3 +141,17 @@ function length_differential(length_1, length_2) {
 
   return differential;
 }
+
+function center_map_on(x_offset, y_offset) {
+  window.scrollTo(x_offset, y_offset);
+}
+
+function current_map_center() {
+  return [window.pageXOffset, window.pageYOffset];
+}
+
+function rebuild_map_in_place() {
+  var here = current_map_center();
+  rebuild_map();
+  center_map_on(here[0], here[1]);
+}

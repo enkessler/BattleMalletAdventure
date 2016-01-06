@@ -24,7 +24,7 @@ $(document).ready(function () {
   $('#rotate_room_button').click(function () {
     // Spawned room object should exist by now
     rotate_room(spawned_room);
-    rebuild_map();
+    rebuild_map_in_place();
   });
 
 });
@@ -78,7 +78,7 @@ function room_node_connection_overlay_click_function() {
     }
   }
 
-  rebuild_map();
+  rebuild_map_in_place();
 }
 
 
@@ -158,7 +158,7 @@ function spawn_room() {
   var rotation_button = document.getElementById('rotate_room_button');
   rotation_button.style.display = 'inline';
 
-  rebuild_map();
+  rebuild_map_in_place();
 }
 
 
