@@ -19,6 +19,18 @@
     margin: auto;
 }
 
+#spawned_room_anchor {
+  position: fixed;
+  left: 45%;
+  top: 40%;
+  z-index: 5;
+}
+
+/*There will only be one of them*/
+.spawned_room {
+  position: absolute;
+}
+
 #rotate_room_button {
     position: fixed;
     left: 45%;

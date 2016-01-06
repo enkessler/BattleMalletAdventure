@@ -1,10 +1,13 @@
-function draw_room(room_object) {
+function draw_room(room_object, root_element) {
   // Build room
   var room_div = create_room_element(room_object);
 
-  // Add room on map
-  var map = document.getElementById('dungeon_map');
-  map.appendChild(room_div);
+  // Add room on the page
+  if (root_element === undefined) {
+    root_element = document.getElementById('dungeon_map');
+  }
+
+  root_element.appendChild(room_div);
 
 
   return room_div;

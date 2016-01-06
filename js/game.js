@@ -442,12 +442,9 @@ function build_room(room_data) {
 
 
 function rebuild_map() {
-  var map = document.getElementById('dungeon_map');
-
   // Empty existing map and 'undraw' rooms
-  while (map.firstChild) {
-    map.removeChild(map.firstChild)
-  }
+  $("div[class*='dungeon_room']").remove();
+
   //console.log('Drawing ' + map_rooms.length + ' rooms');
   for (var key in map_rooms) {
     if (map_rooms.hasOwnProperty(key)) {
@@ -494,11 +491,8 @@ function rebuild_map() {
   // Only draw if necessary
   //console.log('Need to draw spawned room?: ' + ((rotation_button.style.display != '') && (rotation_button.style.display != 'none')));
   if ((rotation_button.style.display != '') && (rotation_button.style.display != 'none')) {
-    var left_offset = parseInt(getComputedStyle(rotation_button).getPropertyValue('left'));
-    var top_offset = (parseInt(getComputedStyle(rotation_button).getPropertyValue('top')) + 50);
-
     //console.log('next room rotation:' + spawned_room.rotation);
-    var room_div = draw_room(spawned_room);
-    position_room(room_div, left_offset, top_offset, 5);
+    var room_anchor = document.getElementById('spawned_room_anchor');
+    draw_room(spawned_room, room_anchor);
   }
 }
