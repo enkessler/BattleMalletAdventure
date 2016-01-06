@@ -1,3 +1,24 @@
+Game flow
+  - start game
+    - place heroes
+  - turn phases
+    - heroes move/attack
+    - enemies move/attack
+  - add events
+
+
+Events
+  - trigger event (via button)
+  - trigger event conditionally (room entry, roll a 6, etc.)
+
+Combat
+  - simple attacks
+    - auto hit
+    - auto damage
+  - realistic attacks
+    - roll to hit and damage
+
+
 Enemy list as left bar
   -add remove enemies to list as the spawn/are killed
   -flash damage overlay on enemy image on damaging attack
@@ -13,7 +34,16 @@ Enemy spawning
   -tie number and enemy type to dungeon level
   -tie spawning to turn based power cycle
   -have spawn locations be related to hero locations (as per game rules) 
-  
+
+Heroes
+  - heroes start in first dungeon room
+  - heroes can be moved
+
+Hero movement
+  - move to any open space
+  - move only within move range
+  - move only along open path
+
 Dungeon rooms
   -have rooms be aware of what dungeon level they are (i.e. how stairs affect them)
   
@@ -25,7 +55,6 @@ Dungeon map
 Dungeon expansion
   -add room when exit node of room is clicked
   -add room when hero ends turn on exit node of room (or whatever normally triggers a new room)
-  -redraw only the spawned room as it rotates so that the map doesn't shift
 
 Display options
   -add option to show/hide node borders
