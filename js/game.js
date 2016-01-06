@@ -1,32 +1,14 @@
 var map_rooms = {};
 var map_nodes = {};
 var map_overlays = {};
-var spawned_room;
+var spawned_room = null;
 var next_room_id = 1;
 var next_overlay_id = 1;
 var room_connections_clicked = 0;
 
 
 $(document).ready(function () {
-
-  // Create a starting room
-  new TCorridorRoom(next_room_id);
-
-  // Display the initial map
-  rebuild_map();
-
-  // Configure room button
-  $('#spawn_room_button').click(function () {
-    spawn_room();
-  });
-
-  // Configure rotation button
-  $('#rotate_room_button').click(function () {
-    // Spawned room object should exist by now
-    rotate_room(spawned_room);
-    rebuild_map_in_place();
-  });
-
+  setup_game();
 });
 
 
@@ -147,11 +129,10 @@ function is_valid_connection_pair() {
 
 
 function spawn_room() {
+  //console.log('Spawning a new room...');
   // Determine new room
+  spawned_room = new TCorridorRoom(next_room_id); // Just a hard-coded corridor for now
   ++next_room_id;
-  var room_id = next_room_id;
-  //console.log('next room id is: ' + room_id);
-  spawned_room = new TCorridorRoom(room_id); // Just a hard-coded corridor for now
   spawned_room.style_classes.push('spawned_room');
   //console.log('new rooms id: ' + next_room.id);
   // Display new room and rotation button
@@ -185,7 +166,7 @@ function connect_new_room() {
 
   // Remove 'spawn' status from new room
   spawned_room.style_classes.splice(spawned_room.style_classes.indexOf('spawned_room'), 1);
-  spawned_room = undefined;
+  spawned_room = null;
 
   //console.log('connection complete');
 }
@@ -458,32 +439,51 @@ function rebuild_map() {
   // Pick a starting room and add it to the draw queue
   var draw_queue = [];
 
-  for (var first_room in map_rooms) break; //
+  for (var first_room in map_rooms) {
+    if (map_rooms.hasOwnProperty(first_room)) {
+      var candidate_room = map_rooms[first_room];
 
-  draw_queue.push({
-    room: map_rooms[first_room],
-    parent_div: null,
-    side: null
-  });
-
-  // Draw next room in queue unless it has already been drawn and add any
-  // connected rooms to the draw queue (repeat until queue empty)
-  while (draw_queue.length != 0) {
-    //console.log('drawing the next room...');
-    var next_room = draw_queue.shift();
-    //console.log('room already drawn?: ' + next_room.room.drawn);
-    // Draw room unless it has already been drawn
-    if (next_room.room.drawn == false) {
-      var new_rooms = build_room(next_room);
-      //console.log('new rooms found:' + new_rooms);
-      draw_queue = draw_queue.concat(new_rooms);
-      //console.log('current_draw queue: ' + draw_queue);
-      next_room.room.drawn = true;
+      //console.log('first room candidate: ' + candidate_room.id);
+      //console.log('room classes: ' + candidate_room.style_classes);
+      var is_spawned_room = candidate_room.style_classes.indexOf('spawned_room') != -1;
+      //console.log('spawned room?: ' + is_spawned_room);
+      if (!is_spawned_room) {
+        //console.log('candidate valid');
+        break; // Stop as soon as we find a room besides the newly spawned room (because it is drawn separately)
+      }
     }
   }
 
-  // Center up the map because, depending on the draw order, it is not necessarily the case that all rooms are in the visible portion of the browser window
-  center_map();
+  // Only draw the dungeon if there was a room found (besides the spawn room)
+  if (map_rooms[first_room] &&
+    ( (spawned_room == null) || (spawned_room.id != map_rooms[first_room].id))) {
+
+
+    draw_queue.push({
+      room: map_rooms[first_room],
+      parent_div: null,
+      side: null
+    });
+
+    // Draw next room in queue unless it has already been drawn and add any
+    // connected rooms to the draw queue (repeat until queue empty)
+    while (draw_queue.length != 0) {
+      //console.log('drawing the next room...');
+      var next_room = draw_queue.shift();
+      //console.log('room already drawn?: ' + next_room.room.drawn);
+      // Draw room unless it has already been drawn
+      if (next_room.room.drawn == false) {
+        var new_rooms = build_room(next_room);
+        //console.log('new rooms found:' + new_rooms);
+        draw_queue = draw_queue.concat(new_rooms);
+        //console.log('current_draw queue: ' + draw_queue);
+        next_room.room.drawn = true;
+      }
+    }
+
+    // Center up the map because, depending on the draw order, it is not necessarily the case that all rooms are in the visible portion of the browser window
+    center_map();
+  }
 
   // Draw spawned room (it won't need to be centered because it should always be drawn centered in the first place)
   var rotation_button = document.getElementById('rotate_room_button');
@@ -495,4 +495,62 @@ function rebuild_map() {
     var room_anchor = document.getElementById('spawned_room_anchor');
     draw_room(spawned_room, room_anchor);
   }
+}
+
+
+function setup_game() {
+  configure_menu_buttons();
+  configure_other_stuff();
+}
+
+
+function configure_menu_buttons() {
+  $('#start_game_button').click(function () {
+    start_game();
+  });
+
+  $('#spawn_room_button').click(function () {
+    spawn_room();
+  });
+
+  // Spawning rooms not available until game starts
+  var spawn_room_button = document.getElementById('spawn_room_button');
+  spawn_room_button.style.display = 'none';
+}
+
+
+function configure_other_stuff() {
+  $('#rotate_room_button').click(function () {
+    // Spawned room object should exist by now
+    rotate_room(spawned_room);
+    rebuild_map_in_place();
+  });
+
+  // Rotating spawn room not available until a room is spawned
+  var rotate_room_button = document.getElementById('rotate_room_button');
+  rotate_room_button.style.display = 'none';
+}
+
+
+function start_game() {
+  // Create a starting room
+  generate_starting_room();
+
+
+  // Turn on room spawning
+  var spawn_room_button = document.getElementById('spawn_room_button');
+  spawn_room_button.style.display = 'inline';
+
+  // Turn off start button
+  var start_game_button = document.getElementById('start_game_button');
+  start_game_button.style.display = 'none';
+
+
+  // Display the initial map
+  rebuild_map();
+}
+
+function generate_starting_room() {
+  new CorridorRoom(next_room_id);
+  ++next_room_id;
 }

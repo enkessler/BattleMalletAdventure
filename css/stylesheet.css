@@ -16,12 +16,18 @@ html {
     border: 5px solid blue;
 }
 
-#spawn_room_button {
+li {
+  display: inline;
+}
+
+#start_game_button {
     background: red;
-    height: 30px;
-    width: 100px;
     text-align: center;
-    margin: auto;
+}
+
+#spawn_room_button {
+  background: red;
+  text-align: center;
 }
 
 #spawned_room_anchor {
@@ -49,6 +55,4 @@ html {
     background: red;
     text-align: center;
     margin: auto;
-    
-    display: none;
 }
