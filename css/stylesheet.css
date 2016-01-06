@@ -1,3 +1,8 @@
+html {
+  height: 125%;
+  width: 125%;
+}
+
 #control_bar {
 	position: fixed;
 	left: 25%;
@@ -47,9 +52,3 @@
     
     display: none;
 }
-
-
-#dungeon_map {
-	border: 1px solid;
-}
-
