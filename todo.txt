@@ -7,6 +7,14 @@ Game flow
   - add events
 
 
+
+
+Startig Hero placement
+  - one hero in first spot of starting room
+  - be able to picking starting spot of hero in room
+  - multiple heroes
+  - add more types of hero
+
 Events
   - trigger event (via button)
   - trigger event conditionally (room entry, roll a 6, etc.)

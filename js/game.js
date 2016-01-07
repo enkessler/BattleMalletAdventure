@@ -5,7 +5,8 @@ var spawned_room = null;
 var next_room_id = 1;
 var next_overlay_id = 1;
 var room_connections_clicked = 0;
-
+var hero_hash = {};
+var next_hero_id = 1;
 
 $(document).ready(function () {
   setup_game();
@@ -551,6 +552,11 @@ function start_game() {
 }
 
 function generate_starting_room() {
-  new CorridorRoom(next_room_id);
+  var starting_room = new CorridorRoom(next_room_id);
   ++next_room_id;
+
+  var starting_hero = new ImperialNoble(next_hero_id);
+  ++next_hero_id;
+
+  starting_room.room_nodes[0].occupants.push(starting_hero);
 }

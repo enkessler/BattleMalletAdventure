@@ -43,6 +43,7 @@ function create_room_node_element(node_object) {
 
   // Configure node overlays
   add_overlays(node_object, node_div);
+  add_occupants(node_object, node_div);
 
   //console.log('drawing room node: ' + node_object.id);
   node_div.id = node_object.id;
@@ -88,4 +89,28 @@ function add_overlays(node_object, node_div) {
         console.log("Don't know how to handle an overlay of this type");
     }
   }
+}
+
+
+function add_occupants(node_object, node_div) {
+  for (var i = 0; i < node_object.occupants.length; ++i) {
+    var occupant_object = node_object.occupants[i];
+
+    var occupant_div = create_occupant_element(occupant_object);
+    node_div.appendChild(occupant_div);
+  }
+}
+
+
+function create_occupant_element(occupant_object) {
+  var occupant_div = document.createElement('div');
+
+  occupant_div.id = occupant_object.id;
+
+  for (var i = 0; i < occupant_object.style_classes.length; i++) {
+    occupant_div.className += ' ' + occupant_object.style_classes[i];
+  }
+
+
+  return occupant_div;
 }

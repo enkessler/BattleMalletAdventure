@@ -1,0 +1,10 @@
+
+div.character_token {
+  position: absolute;
+  height: 75%;
+  width: 75%;
+}
+
+div.imperial_noble_token {
+  background-image: url('../images/imperial_noble_token.gif');
+}

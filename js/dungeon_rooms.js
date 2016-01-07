@@ -3,6 +3,7 @@ function RoomNode(id, room_styles, rotation, parent) {
   this.style_classes = room_styles;
   this.rotation = rotation;
   this.overlays = [];
+  this.occupants = [];
   this.parent_object = parent;
 
   // Add a connection overlay if needed
