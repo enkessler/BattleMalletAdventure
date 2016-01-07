@@ -15,7 +15,7 @@ function draw_room(room_object, root_element) {
 
 
 function connection_overlays_needed() {
-  return spawned_room !== undefined;
+  return spawned_room != null;
 }
 
 
