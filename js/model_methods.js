@@ -198,3 +198,8 @@ function get_connection_overlays_for(connection_side, room_object) {
 
   return overlay_objects;
 }
+
+
+function toggle_object_highlighting(object) {
+  object.highlighted = !object.highlighted;
+}

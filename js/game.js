@@ -7,6 +7,8 @@ var next_overlay_id = 1;
 var room_connections_clicked = 0;
 var hero_hash = {};
 var next_hero_id = 1;
+var in_targeting_mode = false;
+
 
 $(document).ready(function () {
   setup_game();
@@ -62,6 +64,17 @@ function room_node_connection_overlay_click_function() {
   }
 
   rebuild_map_in_place();
+}
+
+
+function hero_element_click_function() {
+  if (in_targeting_mode) {
+    var creature_object = hero_hash[this.id];
+
+    toggle_object_highlighting(creature_object);
+
+    rebuild_map_in_place();
+  }
 }
 
 
@@ -501,6 +514,7 @@ function rebuild_map() {
 
 function setup_game() {
   configure_menu_buttons();
+  configure_action_buttons();
   configure_other_stuff();
 }
 
@@ -517,6 +531,17 @@ function configure_menu_buttons() {
   // Spawning rooms not available until game starts
   var spawn_room_button = document.getElementById('spawn_room_button');
   spawn_room_button.style.display = 'none';
+}
+
+
+function configure_action_buttons() {
+  $('#move_creature_button').click(function () {
+    toggle_movement_phase();
+  });
+
+  // Game actions are not available until the game has started
+  var action_menu_element = document.getElementById('action_bar');
+  action_menu_element.style.display = 'none';
 }
 
 
@@ -542,6 +567,10 @@ function start_game() {
   var spawn_room_button = document.getElementById('spawn_room_button');
   spawn_room_button.style.display = 'inline';
 
+  // Turn on action menu
+  var action_menu_element = document.getElementById('action_bar');
+  action_menu_element.style.display = 'inline';
+
   // Turn off start button
   var start_game_button = document.getElementById('start_game_button');
   start_game_button.style.display = 'none';
@@ -551,6 +580,7 @@ function start_game() {
   rebuild_map();
 }
 
+
 function generate_starting_room() {
   var starting_room = new CorridorRoom(next_room_id);
   ++next_room_id;
@@ -559,4 +589,9 @@ function generate_starting_room() {
   ++next_hero_id;
 
   starting_room.room_nodes[0].occupants.push(starting_hero);
+}
+
+
+function toggle_movement_phase() {
+  in_targeting_mode = !in_targeting_mode;
 }

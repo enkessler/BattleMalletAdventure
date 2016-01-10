@@ -8,3 +8,7 @@ div.character_token {
 div.imperial_noble_token {
   background-image: url('../images/imperial_noble_token.gif');
 }
+
+div.highlighted_creature {
+  border: 2px solid green;
+}

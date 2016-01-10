@@ -106,9 +106,14 @@ function create_occupant_element(occupant_object) {
   var occupant_div = document.createElement('div');
 
   occupant_div.id = occupant_object.id;
+  occupant_div.onclick = hero_element_click_function;
 
   for (var i = 0; i < occupant_object.style_classes.length; i++) {
     occupant_div.className += ' ' + occupant_object.style_classes[i];
+  }
+
+  if (occupant_object.highlighted) {
+    occupant_div.className += ' highlighted_creature';
   }
 
 
