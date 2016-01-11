@@ -61,3 +61,7 @@ html {
   text-align: center;
   margin: auto;
 }
+
+div.highlighted {
+  border: 2px solid green;
+}

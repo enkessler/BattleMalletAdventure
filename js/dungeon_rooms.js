@@ -1,5 +1,7 @@
 function RoomNode(id, room_styles, rotation, parent) {
   this.id = id;
+  game.map_nodes[id] = this;
+
   this.style_classes = room_styles;
   this.rotation = rotation;
   this.overlays = [];
@@ -15,6 +17,32 @@ function RoomNode(id, room_styles, rotation, parent) {
 
     this.overlays.push(overlay_object);
   }
+
+  this.on_click_function = function () {
+    //console.log('Room node ' + this.id + ' was clicked');
+    if (game.in_move_creature_mode) {
+      //console.log('Currently targetted creatures: ' + game.targeted_creature_ids);
+      // Assuming just one targeted creature, one occupant of the original node, and an empty node clicked
+      var targeted_hero = game.hero_hash[game.targeted_creature_ids[0]];
+      var source_node = targeted_hero.current_room_node;
+      var target_node = game.map_nodes[this.id];
+
+      target_node.occupants.push(targeted_hero);
+      source_node.occupants.pop();
+      targeted_hero.current_room_node = target_node;
+      targeted_hero.highlighted = false;
+      game.targeted_creature_ids.splice(game.targeted_creature_ids.indexOf(targeted_hero.id), 1);
+
+      game.in_targeting_mode = false;
+      game.in_move_creature_mode = false;
+      game.action_bar.move_creature_button.highlighted = false;
+
+      game.rebuild_screen_in_place();
+      //console.log('Currently targetted creatures: ' + game.targeted_creature_ids);
+    }
+
+    event.stopPropagation();
+  };
 }
 
 function TombRoom() {

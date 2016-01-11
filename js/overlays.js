@@ -25,5 +25,6 @@ function ConnectionOverlay(id) {
     }
 
     game.rebuild_map_in_place();
+    event.stopPropagation();
   };
 }

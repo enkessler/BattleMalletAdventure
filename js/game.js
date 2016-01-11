@@ -12,9 +12,10 @@ function Game() {
     this.hero_hash = {};
     this.next_hero_id = 1;
     this.in_targeting_mode = false;
+    this.in_move_creature_mode = false;
     this.buttons = {};
     this.rotate_room_button = null;
-
+    this.targeted_creature_ids = [];
     this.configure_control_bar();
     this.configure_action_bar();
     this.configure_other_stuff();
@@ -389,10 +390,15 @@ function Game() {
     ++this.next_hero_id;
 
     starting_room.room_nodes[0].occupants.push(starting_hero);
+    starting_hero.current_room_node = starting_room.room_nodes[0];
   };
 
 
   this.toggle_movement_phase = function () {
     this.in_targeting_mode = !this.in_targeting_mode;
+    this.in_move_creature_mode = !this.in_move_creature_mode;
+    this.action_bar.move_creature_button.highlighted = !this.action_bar.move_creature_button.highlighted;
+
+    this.rebuild_action_bar();
   };
 }

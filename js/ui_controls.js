@@ -13,6 +13,7 @@ function StartGameButton() {
 
   this.on_click_function = function () {
     game.start_game();
+    event.stopPropagation();
   }
 }
 
@@ -24,6 +25,7 @@ function SpawnRoomButton() {
 
   this.on_click_function = function () {
     game.spawn_room();
+    event.stopPropagation();
   }
 }
 
@@ -37,6 +39,7 @@ function RotateRoomButton() {
     // Spawned room object should exist by now
     rotate_room(game.spawned_room);
     rebuild_map_in_place();
+    event.stopPropagation();
   };
 }
 
@@ -51,9 +54,12 @@ function ActionBar() {
 function MoveCreatureButton() {
   this.id = 'move_creature_button';
   this.visible = false;
+  this.highlighted = false;
   this.text = 'Move Creature';
 
   this.on_click_function = function () {
     game.toggle_movement_phase();
+    event.stopPropagation();
+
   }
 }

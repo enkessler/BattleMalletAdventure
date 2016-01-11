@@ -47,6 +47,7 @@ function create_room_node_element(node_object) {
 
   //console.log('drawing room node: ' + node_object.id);
   node_div.id = node_object.id;
+  node_div.onclick = node_object.on_click_function;
 
 
   return node_div;
@@ -171,6 +172,10 @@ function create_button(button_object) {
   } else {
     //console.log(button_object.id + ' should not be vivible');
     button_div.style.display = 'none';
+  }
+
+  if (button_object.highlighted) {
+    button_div.className += ' highlighted';
   }
 
   button_div.onclick = button_object.on_click_function;
