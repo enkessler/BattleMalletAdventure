@@ -1,25 +1,31 @@
-var map_rooms = {};
-var map_nodes = {};
-var map_overlays = {};
-var spawned_room = null;
-var next_room_id = 1;
-var next_overlay_id = 1;
-var room_connections_clicked = 0;
-var hero_hash = {};
-var next_hero_id = 1;
-var in_targeting_mode = false;
+function Game() {
+
+  this.setup_game = function () {
+
+    this.map_rooms = {};
+    this.map_nodes = {};
+    this.map_overlays = {};
+    this.spawned_room = null;
+    this.next_room_id = 1;
+    this.next_overlay_id = 1;
+    this.room_connections_clicked = 0;
+    this.hero_hash = {};
+    this.next_hero_id = 1;
+    this.in_targeting_mode = false;
+    this.buttons = {};
+    this.rotate_room_button = null;
+
+    this.configure_control_bar();
+    this.configure_action_bar();
+    this.configure_other_stuff();
+  };
 
 
-$(document).ready(function () {
-  setup_game();
-});
-
-
-function toggle_connection_overlay(overlay_element) {
+  this.toggle_connection_overlay = function (overlay_element) {
   //console.log('toggling overlay element');
 
   var activated;
-  var overlay_object = map_overlays[overlay_element.id];
+    var overlay_object = game.map_overlays[overlay_element.id];
   var room_object = overlay_object.parent_object.parent_object;
   var connection_side = overlay_object.side;
   //console.log('connection side: ' + connection_side);
@@ -35,102 +41,68 @@ function toggle_connection_overlay(overlay_element) {
   }
 
   if (activated) {
-    ++room_connections_clicked;
+    ++game.room_connections_clicked;
   } else {
-    --room_connections_clicked;
+    --game.room_connections_clicked;
   }
 
   //console.log('activated room connections: ' + room_connections_clicked);
-}
+  };
 
 
-function room_node_connection_overlay_click_function() {
-  //console.log('setting toggle function');
-  toggle_connection_overlay(this);
+  this.is_valid_connection_pair = function () {
+    //console.log('Checking for valid room connection...');
 
-  if (room_connections_clicked == 2) {
-    var validity_data = is_valid_connection_pair();
-    if (validity_data.validity) {
-      connect_new_room();
+    var connection_data = this.get_room_connection_data();
+    var valid;
+    var message;
 
-      var rotation_button = document.getElementById('rotate_room_button');
-      rotation_button.style.display = 'none';
-
-      room_connections_clicked = 0;
-    } else {
-      alert(validity_data.message);
-      toggle_connection_overlay(this);
-    }
-  }
-
-  rebuild_map_in_place();
-}
-
-
-function hero_element_click_function() {
-  if (in_targeting_mode) {
-    var creature_object = hero_hash[this.id];
-
-    toggle_object_highlighting(creature_object);
-
-    rebuild_map_in_place();
-  }
-}
-
-
-function is_valid_connection_pair() {
-  //console.log('Checking for valid room connection...');
-
-  var connection_data = get_room_connection_data();
-  var valid;
-  var message;
-
-  // Need to have two different rooms to connect
-  if ((connection_data.connecting_room === undefined) || (connection_data.base_room === undefined)) {
-    valid = false;
-    message = 'Must choose two different rooms for connection';
-  } else {
-    //console.log('Room connected to base ' + connection_data.base_room.id + ' on side ' + connection_data.base_side + ': ' + connection_data.base_room[connection_data.base_side + '_room']);
-    if (connection_data.base_room[connection_data.base_side + '_room'] != null) {
+    // Need to have two different rooms to connect
+    if ((connection_data.connecting_room === undefined) || (connection_data.base_room === undefined)) {
       valid = false;
-      message = 'Cannot connect a new room to a connection that already connects to a room';
+      message = 'Must choose two different rooms for connection';
     } else {
-      switch (connection_data.base_side) {
-        case 'left':
-          if (connection_data.connecting_side == 'right') {
-            valid = true;
-          } else {
-            valid = false;
-            message = 'Cannot make a connection between the ' + connection_data.base_side + ' and ' + connection_data.connecting_side + ' sides of two rooms';
-          }
-          break;
-        case 'top':
-          if (connection_data.connecting_side == 'bottom') {
-            valid = true;
-          } else {
-            valid = false;
-            message = 'Cannot make a connection between the ' + connection_data.base_side + ' and ' + connection_data.connecting_side + ' sides of two rooms';
-          }
-          break;
-        case 'right':
-          if (connection_data.connecting_side == 'left') {
-            valid = true;
-          } else {
-            valid = false;
-            message = 'Cannot make a connection between the ' + connection_data.base_side + ' and ' + connection_data.connecting_side + ' sides of two rooms';
-          }
-          break;
-        case 'bottom':
-          if (connection_data.connecting_side == 'top') {
-            valid = true;
-          } else {
-            valid = false;
-            message = 'Cannot make a connection between the ' + connection_data.base_side + ' and ' + connection_data.connecting_side + ' sides of two rooms';
-          }
-          break;
-        default:
-          console.log("Don't know how to connection side of '" + connection_data.base_side + "'");
-      }
+      //console.log('Room connected to base ' + connection_data.base_room.id + ' on side ' + connection_data.base_side + ': ' + connection_data.base_room[connection_data.base_side + '_room']);
+      if (connection_data.base_room[connection_data.base_side + '_room'] != null) {
+        valid = false;
+        message = 'Cannot connect a new room to a connection that already connects to a room';
+      } else {
+        switch (connection_data.base_side) {
+          case 'left':
+            if (connection_data.connecting_side == 'right') {
+              valid = true;
+            } else {
+              valid = false;
+              message = 'Cannot make a connection between the ' + connection_data.base_side + ' and ' + connection_data.connecting_side + ' sides of two rooms';
+            }
+            break;
+          case 'top':
+            if (connection_data.connecting_side == 'bottom') {
+              valid = true;
+            } else {
+              valid = false;
+              message = 'Cannot make a connection between the ' + connection_data.base_side + ' and ' + connection_data.connecting_side + ' sides of two rooms';
+            }
+            break;
+          case 'right':
+            if (connection_data.connecting_side == 'left') {
+              valid = true;
+            } else {
+              valid = false;
+              message = 'Cannot make a connection between the ' + connection_data.base_side + ' and ' + connection_data.connecting_side + ' sides of two rooms';
+            }
+            break;
+          case 'bottom':
+            if (connection_data.connecting_side == 'top') {
+              valid = true;
+            } else {
+              valid = false;
+              message = 'Cannot make a connection between the ' + connection_data.base_side + ' and ' + connection_data.connecting_side + ' sides of two rooms';
+            }
+            break;
+          default:
+            console.log("Don't know how to connection side of '" + connection_data.base_side + "'");
+        }
     }
   }
 
@@ -139,37 +111,36 @@ function is_valid_connection_pair() {
     validity: valid,
     message: message
   };
-}
+  };
 
 
-function spawn_room() {
-  //console.log('Spawning a new room...');
-  // Determine new room
-  spawned_room = new TCorridorRoom(next_room_id); // Just a hard-coded corridor for now
-  ++next_room_id;
-  spawned_room.style_classes.push('spawned_room');
-  //console.log('new rooms id: ' + next_room.id);
-  // Display new room and rotation button
-  var rotation_button = document.getElementById('rotate_room_button');
-  rotation_button.style.display = 'inline';
+  this.spawn_room = function () {
+    //console.log('Spawning a new room...');
+    // Determine new room
+    this.spawned_room = new TCorridorRoom(this.next_room_id); // Just a hard-coded corridor for now
+    ++this.next_room_id;
+    this.spawned_room.style_classes.push('spawned_room');
+    //console.log('new rooms id: ' + next_room.id);
+    // Display new room and rotation button
+    this.rotate_room_button.visible = true;
 
-  rebuild_map_in_place();
-}
+    this.rebuild_screen_in_place();
+  };
 
 
-function connect_new_room() {
+  this.connect_new_room = function () {
   //console.log('Connecting new room...');
 
   // Get connection data
-  var connection_data = get_room_connection_data();
+    var connection_data = this.get_room_connection_data();
 
   // Connect objects
-  connect_rooms(connection_data.base_room, connection_data.base_side, connection_data.connecting_room, connection_data.connecting_side);
+    this.connect_rooms(connection_data.base_room, connection_data.base_side, connection_data.connecting_room, connection_data.connecting_side);
 
   //Turn off connection highlighting
-  for (var key in map_overlays) {
-    if (map_overlays.hasOwnProperty(key)) {
-      var overlay = map_overlays[key];
+    for (var key in this.map_overlays) {
+      if (this.map_overlays.hasOwnProperty(key)) {
+        var overlay = this.map_overlays[key];
 
       if (overlay.highlighted) {
         //console.log('Removing highlighting from overlay ' + overlay.id);
@@ -179,17 +150,17 @@ function connect_new_room() {
   }
 
   // Remove 'spawn' status from new room
-  spawned_room.style_classes.splice(spawned_room.style_classes.indexOf('spawned_room'), 1);
-  spawned_room = null;
+    this.spawned_room.style_classes.splice(this.spawned_room.style_classes.indexOf('spawned_room'), 1);
+    this.spawned_room = null;
 
   //console.log('connection complete');
-}
+  };
 
 
-function get_room_connection_data() {
+  this.get_room_connection_data = function () {
   //console.log('getting room connection data...');
 
-  var connection_overlays = map_overlays;
+    var connection_overlays = game.map_overlays;
 
   var room_sets = [];
   for (var key in connection_overlays) {
@@ -256,7 +227,7 @@ function get_room_connection_data() {
   var base_room_set = rooms_to_connect[0];
   var spawned_room_set = rooms_to_connect[1];
   var base_room_object = rooms_to_connect[0].room_object;
-  var spawned_room_object = spawned_room;
+    var spawned_room_object = game.spawned_room;
 
 
 //  for (i = 0; i < map_rooms.length; ++i) {
@@ -297,10 +268,10 @@ function get_room_connection_data() {
 
 
   return connection_data;
-}
+  };
 
 
-function connect_rooms(base_room_object, base_room_set_connection_side, connected_room_object, connected_room_set_connection_side) {
+  this.connect_rooms = function (base_room_object, base_room_set_connection_side, connected_room_object, connected_room_set_connection_side) {
 
   switch (base_room_set_connection_side) {
     case 'top':
@@ -335,263 +306,93 @@ function connect_rooms(base_room_object, base_room_set_connection_side, connecte
     default:
       console.log("Don't know how to handle a connection side of '" + connected_room_set_connection_side + "'");
   }
-}
+  };
 
 
-function build_room(room_data) {
-  // Draw the room
-
-  var room_object = room_data.room;
-  var base_div = room_data.parent_div;
-  var base_connection_side = room_data.side;
-
-  var left_offset;
-  var top_offset;
-
-  var room_div = draw_room(room_object);
-
-  if (base_div == null) {
-    //console.log('No parent div. Using default offsets...');
-    left_offset = "100";
-    top_offset = "100";
-  } else {
-    //console.log('Parent div found (' + base_div.id + '). Calculating offsets...');
-    //console.log('Parent room styling: ' + getComputedStyle(base_div));
-    //console.log('Parent room width: ' + getComputedStyle(base_div).getPropertyValue('width'));
-    //console.log('Parent room top: ' + getComputedStyle(base_div).getPropertyValue('top'));
-    //console.log('Parent room left: ' + getComputedStyle(base_div).getPropertyValue('left'));
-    //console.log('Connectd room is to the: ' + base_connection_side);
-    left_offset = left_offset_for(room_div, base_connection_side, base_div);
-    top_offset = top_offset_for(room_div, base_connection_side, base_div);
-  }
-
-  //console.log('room offsets:');
-  //console.log('left offset:' + left_offset);
-  //console.log('top offset:' + top_offset);
-  //console.log('map room rotation:' + room_object.rotation);
-  position_room(room_div, left_offset, top_offset, null);
-
-  // Generate any connecting rooms
-  var connected_rooms = [];
-
-  //console.log('Adjoining rooms -');
-  //console.log('left room: ' + room_object.left_room);
-  //console.log('top room: ' + room_object.top  );
-  //console.log('right room: ' + room_object.right);
-  //console.log('bottom room: ' + room_object.bottom);
+  this.rebuild_screen = rebuild_screen;
+  this.rebuild_control_bar = rebuild_control_bar;
+  this.rebuild_action_bar = rebuild_action_bar;
+  this.rebuild_map = rebuild_map;
+  this.rebuild_map_in_place = rebuild_map_in_place;
+  this.rebuild_screen_in_place = rebuild_screen_in_place;
 
 
-  // Check for left adjoining room
-  if (room_object.left_room) {
-    //console.log('Adding a left room');
-    //console.log('Adding a left room to div "' + room_div.id + '"');
+  this.configure_control_bar = function () {
+    var bar = new ControlBar();
+    this.control_bar = bar;
 
-    new_room_data = {
-      room: room_object.left_room,
-      parent_div: room_div,
-      side: 'left'
-    };
+    var button = new StartGameButton();
+    bar.start_game_button = button;
+    this.buttons[button.id] = button;
 
-    connected_rooms.push(new_room_data);
-  }
+    button = new SpawnRoomButton();
+    bar.spawn_room_button = button;
+    this.buttons[button.id] = button;
 
-  // Check for top adjoining room
-  if (room_object.top_room) {
-    //console.log('Adding a top room to div "' + room_div.id + '"');
-    new_room_data = {
-      room: room_object.top_room,
-      parent_div: room_div,
-      side: 'top'
-    };
+    // Starting the game is available immediately
+    bar.start_game_button.visible = true;
 
-    connected_rooms.push(new_room_data);
-  }
-
-  // Check for right adjoining room
-  if (room_object.right_room) {
-    //console.log('Adding a right room to div "' + room_div.id + '"');
-    new_room_data = {
-      room: room_object.right_room,
-      parent_div: room_div,
-      side: 'right'
-    };
-
-    connected_rooms.push(new_room_data);
-  }
-
-  // Check for bottom adjoining room
-  if (room_object.bottom_room) {
-    //console.log('Adding a bottom room to div "' + room_div.id + '"');
-    var new_room_data = {
-      room: room_object.bottom_room,
-      parent_div: room_div,
-      side: 'bottom'
-    };
-
-    connected_rooms.push(new_room_data);
-  }
-
-  // Return any connected rooms
-  return connected_rooms;
-}
+    // Spawning rooms not available until game starts
+    bar.spawn_room_button.visible = false;
+  };
 
 
-function rebuild_map() {
-  // Empty existing map and 'undraw' rooms
-  $("div[class*='dungeon_room']").remove();
+  this.configure_action_bar = function () {
+    var bar = new ActionBar();
+    this.action_bar = bar;
 
-  //console.log('Drawing ' + map_rooms.length + ' rooms');
-  for (var key in map_rooms) {
-    if (map_rooms.hasOwnProperty(key)) {
-      //console.log('Setting room ' + i + ' to undrawn')
-      map_rooms[key].drawn = false;
-    }
-  }
+    var button = new MoveCreatureButton();
+    bar.move_creature_button = button;
+    this.buttons[button.id] = button;
 
-  // Draw current rooms
-
-  // Pick a starting room and add it to the draw queue
-  var draw_queue = [];
-
-  for (var first_room in map_rooms) {
-    if (map_rooms.hasOwnProperty(first_room)) {
-      var candidate_room = map_rooms[first_room];
-
-      //console.log('first room candidate: ' + candidate_room.id);
-      //console.log('room classes: ' + candidate_room.style_classes);
-      var is_spawned_room = candidate_room.style_classes.indexOf('spawned_room') != -1;
-      //console.log('spawned room?: ' + is_spawned_room);
-      if (!is_spawned_room) {
-        //console.log('candidate valid');
-        break; // Stop as soon as we find a room besides the newly spawned room (because it is drawn separately)
-      }
-    }
-  }
-
-  // Only draw the dungeon if there was a room found (besides the spawn room)
-  if (map_rooms[first_room] &&
-    ( (spawned_room == null) || (spawned_room.id != map_rooms[first_room].id))) {
+    // Game actions are not available until the game has started
+    bar.visible = false;
+    bar.move_creature_button.visible = false;
+  };
 
 
-    draw_queue.push({
-      room: map_rooms[first_room],
-      parent_div: null,
-      side: null
-    });
+  this.configure_other_stuff = function () {
+    var button = new RotateRoomButton();
+    game.rotate_room_button = button;
+    this.buttons[button.id] = button;
 
-    // Draw next room in queue unless it has already been drawn and add any
-    // connected rooms to the draw queue (repeat until queue empty)
-    while (draw_queue.length != 0) {
-      //console.log('drawing the next room...');
-      var next_room = draw_queue.shift();
-      //console.log('room already drawn?: ' + next_room.room.drawn);
-      // Draw room unless it has already been drawn
-      if (next_room.room.drawn == false) {
-        var new_rooms = build_room(next_room);
-        //console.log('new rooms found:' + new_rooms);
-        draw_queue = draw_queue.concat(new_rooms);
-        //console.log('current_draw queue: ' + draw_queue);
-        next_room.room.drawn = true;
-      }
-    }
-
-    // Center up the map because, depending on the draw order, it is not necessarily the case that all rooms are in the visible portion of the browser window
-    center_map();
-  }
-
-  // Draw spawned room (it won't need to be centered because it should always be drawn centered in the first place)
-  var rotation_button = document.getElementById('rotate_room_button');
-
-  // Only draw if necessary
-  //console.log('Need to draw spawned room?: ' + ((rotation_button.style.display != '') && (rotation_button.style.display != 'none')));
-  if ((rotation_button.style.display != '') && (rotation_button.style.display != 'none')) {
-    //console.log('next room rotation:' + spawned_room.rotation);
-    var room_anchor = document.getElementById('spawned_room_anchor');
-    draw_room(spawned_room, room_anchor);
-  }
-}
+    // Rotating spawn room not available until a room is spawned
+    this.rotate_room_button.visible = false;
+  };
 
 
-function setup_game() {
-  configure_menu_buttons();
-  configure_action_buttons();
-  configure_other_stuff();
-}
+  this.start_game = function () {
+    // Create a starting room
+    this.generate_starting_room();
 
 
-function configure_menu_buttons() {
-  $('#start_game_button').click(function () {
-    start_game();
-  });
+    // Turn on room spawning
+    this.control_bar.spawn_room_button.visible = true;
 
-  $('#spawn_room_button').click(function () {
-    spawn_room();
-  });
+    // Turn on action menu
+    this.action_bar.visible = true;
+    this.action_bar.move_creature_button.visible = true;
 
-  // Spawning rooms not available until game starts
-  var spawn_room_button = document.getElementById('spawn_room_button');
-  spawn_room_button.style.display = 'none';
-}
+    // Turn off start button
+    this.control_bar.start_game_button.visible = false;
 
-
-function configure_action_buttons() {
-  $('#move_creature_button').click(function () {
-    toggle_movement_phase();
-  });
-
-  // Game actions are not available until the game has started
-  var action_menu_element = document.getElementById('action_bar');
-  action_menu_element.style.display = 'none';
-}
+    // Display the initial map
+    this.rebuild_screen();
+  };
 
 
-function configure_other_stuff() {
-  $('#rotate_room_button').click(function () {
-    // Spawned room object should exist by now
-    rotate_room(spawned_room);
-    rebuild_map_in_place();
-  });
+  this.generate_starting_room = function () {
+    var starting_room = new CorridorRoom(this.next_room_id);
+    ++this.next_room_id;
 
-  // Rotating spawn room not available until a room is spawned
-  var rotate_room_button = document.getElementById('rotate_room_button');
-  rotate_room_button.style.display = 'none';
-}
+    var starting_hero = new ImperialNoble(this.next_hero_id);
+    ++this.next_hero_id;
+
+    starting_room.room_nodes[0].occupants.push(starting_hero);
+  };
 
 
-function start_game() {
-  // Create a starting room
-  generate_starting_room();
-
-
-  // Turn on room spawning
-  var spawn_room_button = document.getElementById('spawn_room_button');
-  spawn_room_button.style.display = 'inline';
-
-  // Turn on action menu
-  var action_menu_element = document.getElementById('action_bar');
-  action_menu_element.style.display = 'inline';
-
-  // Turn off start button
-  var start_game_button = document.getElementById('start_game_button');
-  start_game_button.style.display = 'none';
-
-
-  // Display the initial map
-  rebuild_map();
-}
-
-
-function generate_starting_room() {
-  var starting_room = new CorridorRoom(next_room_id);
-  ++next_room_id;
-
-  var starting_hero = new ImperialNoble(next_hero_id);
-  ++next_hero_id;
-
-  starting_room.room_nodes[0].occupants.push(starting_hero);
-}
-
-
-function toggle_movement_phase() {
-  in_targeting_mode = !in_targeting_mode;
+  this.toggle_movement_phase = function () {
+    this.in_targeting_mode = !this.in_targeting_mode;
+  };
 }

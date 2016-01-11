@@ -8,8 +8,8 @@ function RoomNode(id, room_styles, rotation, parent) {
 
   // Add a connection overlay if needed
   if (room_styles.join(' ').indexOf('_connect_') != -1) {
-    var overlay_object = new ConnectionOverlay(next_overlay_id);
-    ++next_overlay_id;
+    var overlay_object = new ConnectionOverlay(game.next_overlay_id);
+    ++game.next_overlay_id;
     overlay_object.parent_object = this;
     overlay_object.side = determine_connection_side(room_styles);
 
@@ -31,7 +31,7 @@ function StairsRoom() {
 
 function CorridorRoom(id, rotation) {
   //console.log('creating a Corridor room with id ' + id);
-  map_rooms[id] = this;
+  game.map_rooms[id] = this;
   this.id = id;
   this.style_classes = ['corridor_room', 'dungeon_room'];
 
@@ -72,7 +72,7 @@ function LCorridorRoom() {
 
 function TCorridorRoom(id, rotation) {
   //console.log('creating a TCorridor room with id ' + id);
-  map_rooms[id] = this;
+  game.map_rooms[id] = this;
   this.id = id;
   this.style_classes = ['t_corridor_room', 'dungeon_room'];
 

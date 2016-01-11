@@ -58,7 +58,7 @@ function create_connection_overlay_element(overlay_object) {
 
   overlay_div.id = overlay_object.id;
   overlay_div.className = 'connection_node_overlay';
-  overlay_div.onclick = room_node_connection_overlay_click_function;
+  overlay_div.onclick = overlay_object.on_click_function;
 
   if (overlay_object.highlighted) {
     //console.log('adding highlighting to created overlay ' + overlay_object.id)
@@ -106,7 +106,7 @@ function create_occupant_element(occupant_object) {
   var occupant_div = document.createElement('div');
 
   occupant_div.id = occupant_object.id;
-  occupant_div.onclick = hero_element_click_function;
+  occupant_div.onclick = occupant_object.on_click_function;
 
   for (var i = 0; i < occupant_object.style_classes.length; i++) {
     occupant_div.className += ' ' + occupant_object.style_classes[i];
@@ -118,4 +118,81 @@ function create_occupant_element(occupant_object) {
 
 
   return occupant_div;
+}
+
+
+function create_control_bar_element(bar_object) {
+  var bar_div = document.createElement('div');
+
+  bar_div.id = bar_object.id;
+
+  if (bar_object.visible) {
+    bar_div.style.display = 'inline';
+  } else {
+    bar_div.style.display = 'none';
+  }
+
+  bar_div.appendChild(create_button(bar_object.start_game_button));
+  bar_div.appendChild(create_button(bar_object.spawn_room_button));
+
+
+  return bar_div;
+}
+
+
+function create_action_bar_element(bar_object) {
+  var bar_div = document.createElement('div');
+
+  bar_div.id = bar_object.id;
+
+  if (bar_object.visible) {
+    bar_div.style.display = 'inline';
+  } else {
+    bar_div.style.display = 'none';
+  }
+
+  bar_div.appendChild(create_button(bar_object.move_creature_button));
+
+
+  return bar_div;
+}
+
+
+function create_button(button_object) {
+  var button_div = document.createElement('div');
+
+  button_div.id = button_object.id;
+  button_div.innerHTML = button_object.text;
+  //console.log('visibility for ' + button_object.id + ' is: ' + button_object.visible);
+
+  if (button_object.visible) {
+    //console.log(button_object.id + ' should be vivible');
+    button_div.style.display = 'inline';
+  } else {
+    //console.log(button_object.id + ' should not be vivible');
+    button_div.style.display = 'none';
+  }
+
+  button_div.onclick = button_object.on_click_function;
+
+
+  return button_div;
+}
+
+
+function create_dungeon_map_element(rooms_hash) {
+  var map_div = document.createElement('div');
+  map_div.id = 'dungeon_map';
+
+
+  return map_div;
+}
+
+
+function create_spawned_room_anchor_element() {
+  var anchor_div = document.createElement('div');
+  anchor_div.id = 'spawned_room_anchor';
+
+
+  return anchor_div;
 }

@@ -29,7 +29,7 @@ html {
   border: 5px solid blue;
 }
 
-li {
+#control_bar div, #action_bar div {
   background: red;
   text-align: center;
   display: inline;
