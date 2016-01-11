@@ -4,16 +4,16 @@ html {
 }
 
 #control_bar {
-	position: fixed;
-	left: 25%;
-	top: 20px;
-	width: 50%;
-    z-index: 5;
-    
-	background: grey;
-    height: 50px;
-    
-    border: 5px solid blue;
+  position: fixed;
+  left: 25%;
+  top: 20px;
+  width: 50%;
+  z-index: 5;
+
+  background: grey;
+  height: 50px;
+
+  border: 5px solid blue;
 }
 
 #action_bar {
@@ -48,16 +48,16 @@ html {
 }
 
 #rotate_room_button {
-    position: fixed;
-    left: 45%;
-    top: 25%;
-    
-    width: 10%;
-    height: 5%;
-    z-index: 5;
-    
-    border: 2px solid blue;
-    background: red;
-    text-align: center;
-    margin: auto;
+  position: fixed;
+  left: 45%;
+  top: 25%;
+
+  width: 10%;
+  height: 5%;
+  z-index: 5;
+
+  border: 2px solid blue;
+  background: red;
+  text-align: center;
+  margin: auto;
 }

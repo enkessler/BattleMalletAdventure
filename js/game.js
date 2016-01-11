@@ -22,31 +22,31 @@ function Game() {
 
 
   this.toggle_connection_overlay = function (overlay_element) {
-  //console.log('toggling overlay element');
+    //console.log('toggling overlay element');
 
-  var activated;
+    var activated;
     var overlay_object = game.map_overlays[overlay_element.id];
-  var room_object = overlay_object.parent_object.parent_object;
-  var connection_side = overlay_object.side;
-  //console.log('connection side: ' + connection_side);
+    var room_object = overlay_object.parent_object.parent_object;
+    var connection_side = overlay_object.side;
+    //console.log('connection side: ' + connection_side);
 
-  var relevant_connection_overlays = get_connection_overlays_for(connection_side, room_object);
+    var relevant_connection_overlays = get_connection_overlays_for(connection_side, room_object);
 
-  for (var i = 0; i < relevant_connection_overlays.length; ++i) {
-    //console.log('toggling node highlighting');
-    var overlay = relevant_connection_overlays[i];
+    for (var i = 0; i < relevant_connection_overlays.length; ++i) {
+      //console.log('toggling node highlighting');
+      var overlay = relevant_connection_overlays[i];
 
-    overlay.highlighted = !overlay.highlighted;
-    activated = overlay.highlighted;
-  }
+      overlay.highlighted = !overlay.highlighted;
+      activated = overlay.highlighted;
+    }
 
-  if (activated) {
-    ++game.room_connections_clicked;
-  } else {
-    --game.room_connections_clicked;
-  }
+    if (activated) {
+      ++game.room_connections_clicked;
+    } else {
+      --game.room_connections_clicked;
+    }
 
-  //console.log('activated room connections: ' + room_connections_clicked);
+    //console.log('activated room connections: ' + room_connections_clicked);
   };
 
 
@@ -103,14 +103,14 @@ function Game() {
           default:
             console.log("Don't know how to connection side of '" + connection_data.base_side + "'");
         }
+      }
     }
-  }
 
 
-  return {
-    validity: valid,
-    message: message
-  };
+    return {
+      validity: valid,
+      message: message
+    };
   };
 
 
@@ -129,104 +129,104 @@ function Game() {
 
 
   this.connect_new_room = function () {
-  //console.log('Connecting new room...');
+    //console.log('Connecting new room...');
 
-  // Get connection data
+    // Get connection data
     var connection_data = this.get_room_connection_data();
 
-  // Connect objects
+    // Connect objects
     this.connect_rooms(connection_data.base_room, connection_data.base_side, connection_data.connecting_room, connection_data.connecting_side);
 
-  //Turn off connection highlighting
+    //Turn off connection highlighting
     for (var key in this.map_overlays) {
       if (this.map_overlays.hasOwnProperty(key)) {
         var overlay = this.map_overlays[key];
 
-      if (overlay.highlighted) {
-        //console.log('Removing highlighting from overlay ' + overlay.id);
-        overlay.highlighted = false;
+        if (overlay.highlighted) {
+          //console.log('Removing highlighting from overlay ' + overlay.id);
+          overlay.highlighted = false;
+        }
       }
     }
-  }
 
-  // Remove 'spawn' status from new room
+    // Remove 'spawn' status from new room
     this.spawned_room.style_classes.splice(this.spawned_room.style_classes.indexOf('spawned_room'), 1);
     this.spawned_room = null;
 
-  //console.log('connection complete');
+    //console.log('connection complete');
   };
 
 
   this.get_room_connection_data = function () {
-  //console.log('getting room connection data...');
+    //console.log('getting room connection data...');
 
     var connection_overlays = game.map_overlays;
 
-  var room_sets = [];
-  for (var key in connection_overlays) {
-    if (connection_overlays.hasOwnProperty(key)) {
-      var overlay = connection_overlays[key];
+    var room_sets = [];
+    for (var key in connection_overlays) {
+      if (connection_overlays.hasOwnProperty(key)) {
+        var overlay = connection_overlays[key];
 
-      if (overlay.highlighted) {
-        //console.log('working with overlay (' + overlay.id + ')');
-        var connection_side = overlay.side;
-        //console.log('connection side: ' + connection_side);
-        var parent_room_object = overlay.parent_object.parent_object;
-        //console.log('parent room found: ' + parent_room_element.id);
+        if (overlay.highlighted) {
+          //console.log('working with overlay (' + overlay.id + ')');
+          var connection_side = overlay.side;
+          //console.log('connection side: ' + connection_side);
+          var parent_room_object = overlay.parent_object.parent_object;
+          //console.log('parent room found: ' + parent_room_element.id);
 
-        room_sets.push({room_object: parent_room_object, connection_side: connection_side});
+          room_sets.push({room_object: parent_room_object, connection_side: connection_side});
+        }
       }
     }
-  }
 
-  //console.log('final room sets:' + room_sets);
-  //for (var i = 0; i < room_sets.length; ++i) {
-  //    var room_set = room_sets[i];
-  //    console.log('room_set:');
-  //    console.log('element:' + room_set.room_element.id);
-  //    console.log('side:' + room_set.connection_side);
-  //}
+    //console.log('final room sets:' + room_sets);
+    //for (var i = 0; i < room_sets.length; ++i) {
+    //    var room_set = room_sets[i];
+    //    console.log('room_set:');
+    //    console.log('element:' + room_set.room_element.id);
+    //    console.log('side:' + room_set.connection_side);
+    //}
 
-  var found_ids = [];
-  var rooms_to_connect = [];
+    var found_ids = [];
+    var rooms_to_connect = [];
 
-  for (var i = 0; i < room_sets.length; ++i) {
-    var room_set = room_sets[i];
-    //console.log('found ids: ' + found_ids);
-    //console.log('checking for id: ' + room_set.room_element);
-    //console.log('index: : ' + found_ids.indexOf(room_set.room_element));
-    if (found_ids.indexOf(room_set.room_object.id) == -1) {
-      //console.log('unique room found');
-      found_ids.push(room_set.room_object.id);
-      rooms_to_connect.push(room_set);
+    for (var i = 0; i < room_sets.length; ++i) {
+      var room_set = room_sets[i];
+      //console.log('found ids: ' + found_ids);
+      //console.log('checking for id: ' + room_set.room_element);
+      //console.log('index: : ' + found_ids.indexOf(room_set.room_element));
+      if (found_ids.indexOf(room_set.room_object.id) == -1) {
+        //console.log('unique room found');
+        found_ids.push(room_set.room_object.id);
+        rooms_to_connect.push(room_set);
+      }
     }
-  }
 
-  //console.log('final room sets');
-  //for (var i = 0; i < rooms_to_connect.length; ++i) {
-  //  var room_set = rooms_to_connect[i];
-  //  console.log('room_set:');
-  //  console.log('object:' + room_set.room_object.id);
-  //  console.log('side:' + room_set.connection_side);
-  //}
+    //console.log('final room sets');
+    //for (var i = 0; i < rooms_to_connect.length; ++i) {
+    //  var room_set = rooms_to_connect[i];
+    //  console.log('room_set:');
+    //  console.log('object:' + room_set.room_object.id);
+    //  console.log('side:' + room_set.connection_side);
+    //}
 
-  rooms_to_connect.sort(function (a, b) {
-    return a.room_object.id > b.room_object.id
-  });
+    rooms_to_connect.sort(function (a, b) {
+      return a.room_object.id > b.room_object.id
+    });
 
-  //console.log('sorted room sets');
-  //for (var i = 0; i < rooms_to_connect.length; ++i) {
-  //    var room_set = rooms_to_connect[i];
-  //    console.log('room_set:');
-  //    console.log('element:' + room_set.room_element.id);
-  //    console.log('side:' + room_set.connection_side);
-  //}
+    //console.log('sorted room sets');
+    //for (var i = 0; i < rooms_to_connect.length; ++i) {
+    //    var room_set = rooms_to_connect[i];
+    //    console.log('room_set:');
+    //    console.log('element:' + room_set.room_element.id);
+    //    console.log('side:' + room_set.connection_side);
+    //}
 
 
-  // There should be two rooms found with highlighting and the newly spawned room should have the higher id
-  var base_room_set = rooms_to_connect[0];
-  var spawned_room_set = rooms_to_connect[1];
-  var base_room_object = rooms_to_connect[0].room_object;
+    // There should be two rooms found with highlighting and the newly spawned room should have the higher id
+    var base_room_set = rooms_to_connect[0];
+    var spawned_room_set = rooms_to_connect[1];
+    var base_room_object = rooms_to_connect[0].room_object;
     var spawned_room_object = game.spawned_room;
 
 
@@ -240,72 +240,72 @@ function Game() {
 //    }
 //  }
 
-  //console.log('room_objects:');
-  //console.log('connected_room:' + connected_room_object);
-  //console.log('spawned:' + spawned_room_object);
+    //console.log('room_objects:');
+    //console.log('connected_room:' + connected_room_object);
+    //console.log('spawned:' + spawned_room_object);
 
-  // It is possible that the same room has been chosen for both connections, in which case there will be no second room
-  if (spawned_room_set === undefined) {
-    spawned_room_object = undefined;
-    spawned_room_set = {
-      room_element: undefined,
-      connection_side: undefined
+    // It is possible that the same room has been chosen for both connections, in which case there will be no second room
+    if (spawned_room_set === undefined) {
+      spawned_room_object = undefined;
+      spawned_room_set = {
+        room_element: undefined,
+        connection_side: undefined
+      };
+    }
+
+    var connection_data = {
+      base_room: base_room_object,
+      base_side: base_room_set.connection_side,
+      connecting_room: spawned_room_object,
+      connecting_side: spawned_room_set.connection_side
     };
-  }
 
-  var connection_data = {
-    base_room: base_room_object,
-    base_side: base_room_set.connection_side,
-    connecting_room: spawned_room_object,
-    connecting_side: spawned_room_set.connection_side
-  };
-
-  //console.log('Final connection data:');
-  //console.log('base room: ' + connection_data.base_room.id);
-  //console.log('base side: ' + connection_data.base_side);
-  //console.log('connecting room: ' + connection_data.connecting_room);
-  //console.log('connecting side: ' + connection_data.connecting_side);
+    //console.log('Final connection data:');
+    //console.log('base room: ' + connection_data.base_room.id);
+    //console.log('base side: ' + connection_data.base_side);
+    //console.log('connecting room: ' + connection_data.connecting_room);
+    //console.log('connecting side: ' + connection_data.connecting_side);
 
 
-  return connection_data;
+    return connection_data;
   };
 
 
   this.connect_rooms = function (base_room_object, base_room_set_connection_side, connected_room_object, connected_room_set_connection_side) {
 
-  switch (base_room_set_connection_side) {
-    case 'top':
-      base_room_object.top_room = connected_room_object;
-      break;
-    case 'right':
-      base_room_object.right_room = connected_room_object;
-      break;
-    case 'bottom':
-      base_room_object.bottom_room = connected_room_object;
-      break;
-    case 'left':
-      base_room_object.left_room = connected_room_object;
-      break;
-    default:
-      console.log("Don't know how to handle a connection side of '" + base_room_set_connection_side + "'");
-  }
+    switch (base_room_set_connection_side) {
+      case 'top':
+        base_room_object.top_room = connected_room_object;
+        break;
+      case 'right':
+        base_room_object.right_room = connected_room_object;
+        break;
+      case 'bottom':
+        base_room_object.bottom_room = connected_room_object;
+        break;
+      case 'left':
+        base_room_object.left_room = connected_room_object;
+        break;
+      default:
+        console.log("Don't know how to handle a connection side of '" + base_room_set_connection_side + "'");
+    }
 
-  switch (connected_room_set_connection_side) {
-    case 'top':
-      connected_room_object.top_room = base_room_object;
-      break;
-    case 'right':
-      connected_room_object.right_room = base_room_object;
-      break;
-    case 'bottom':
-      connected_room_object.bottom_room = base_room_object;
-      break;
-    case 'left':
-      connected_room_object.left_room = base_room_object;
-      break;
-    default:
-      console.log("Don't know how to handle a connection side of '" + connected_room_set_connection_side + "'");
-  }
+    switch (connected_room_set_connection_side) {
+      case 'top':
+        connected_room_object.top_room = base_room_object;
+        break;
+      case 'right':
+        connected_room_object.right_room = base_room_object;
+        break;
+      case 'bottom':
+        connected_room_object.bottom_room = base_room_object;
+        break;
+      case 'left':
+        connected_room_object.left_room = base_room_object;
+        break;
+      default:
+        console.log("Don't know how to handle a connection side of '" + connected_room_set_connection_side + "'");
+    }
   };
 
 
