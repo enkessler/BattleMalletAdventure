@@ -1,10 +1,10 @@
-function ImperialNoble(id) {
+function MagnanimousSwordsman(id) {
   game.hero_hash[id] = this;
   this.id = id;
   this.current_room_node = null;
   this.highlighted = false;
 
-  this.style_classes = ['character_token', 'hero_token', 'imperial_noble_token'];
+  this.style_classes = ['character_token', 'hero_token', 'magnanimous_swordsman_token'];
 
   this.on_click_function = function () {
     if (game.in_targeting_mode) {

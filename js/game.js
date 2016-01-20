@@ -386,7 +386,7 @@ function Game() {
     var starting_room = new CorridorRoom(this.next_room_id);
     ++this.next_room_id;
 
-    var starting_hero = new ImperialNoble(this.next_hero_id);
+    var starting_hero = new MagnanimousSwordsman(this.next_hero_id);
     ++this.next_hero_id;
 
     starting_room.room_nodes[0].occupants.push(starting_hero);
